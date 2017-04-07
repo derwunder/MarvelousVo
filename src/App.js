@@ -2,8 +2,33 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+
+
+
+
 class App extends Component {
+  constructor(props) {
+      super(props);
+      this.state = {
+        open: false
+      };
+      this.handleOpen= this.handleOpen.bind(this);
+      this.handleClose= this.handleClose.bind(this);
+      //this.handleTap = this.handleTap.bind(this);
+    }
+
+
+  handleOpen  () {
+    this.setState({open: true});
+  };
+
+  handleClose  () {
+    this.setState({open: false});
+  };
+handleToggle = () => this.setState({open: !this.state.open});
+
   render() {
+
     return (
       <div className="App">
         <div className="App-header">

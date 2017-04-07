@@ -1,0 +1,18 @@
+.foot-box{
+  font-family: 'cac_champagneregular', 'Georgia', serif;
+
+  width: 100%;
+height:60px;
+/*line-height: 60px;*/
+    padding-top: 25px;
+box-shadow: rgba(187, 55, 125, 1) 0px 0px 15px;
+background: -webkit-linear-gradient(-75deg,
+  rgba(187, 55, 125, 1),
+  rgba(251, 211, 233, 1),
+  rgba(255, 255, 255, 0),rgba(255, 255, 255, 0));
+}
+.foot-box p{
+  color:#747474;
+  text-align: center;
+  font-size: 26px;
+}
