@@ -19,20 +19,14 @@ import {drawerOpen} from '../../actions/Actions';
 class DrawerCO extends Component {
   constructor(props) {
     super(props);
-    this.state = {open: false};
   }
 
-  handleToggle = () => this.setState({open: !this.state.open});
   render() {
     var {dispatch,drawerReducer} = this.props;
 
     return (
       <div>
-        <RaisedButton
-          label="Toggle Drawer"
-          onTouchTap={this.handleToggle}
-        />
-        <Drawer docked={false}
+        <Drawer docked={false} //some
           open={drawerReducer.drawerOpen}
           onRequestChange={(open) => dispatch(drawerOpen()) }>
           <List style={{background:"#004D40"}}>

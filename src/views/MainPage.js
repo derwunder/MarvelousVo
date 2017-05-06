@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 //import NavMenu from '../components/navmenu/NavMenu';
+
+import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import Foot from '../components/Foot';
-import {AppBar, RaisedButton ,FlatButton, Dialog} from 'material-ui';
+import {AppBar,
+   Toolbar, ToolbarGroup, ToolbarTitle, ToolbarSeparator,
+   DropDownMenu, MenuItem, FontIcon, TextField,
+   RaisedButton ,FlatButton, Dialog, IconButton} from 'material-ui';
 import DrawerCO from '../components/Drawer/DrawerCO';
 
 import {drawerOpen} from '../actions/Actions';
 
+import HeadRoom from 'react-headroom';
+
 class MainPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {open: false};
+    this.state = {open: false,
+    searchValue:''};
   }
 
 
@@ -21,44 +29,48 @@ class MainPage extends Component {
   handleClose = () => {
     this.setState({open: false});
   };
+  handleChange = (event) => {
+    this.setState({
+      searchValue: event.target.value,
+    });
+  };
 
   //handleToggle = () => this.setState({open: !this.state.open});
   render() {
     var {dispatch} =this.props;
-    const actions = [
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onTouchTap={this.handleClose}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        keyboardFocused={true}
-        onTouchTap={this.handleClose}
-      />
-    ];
+
 
     return (
       <div>
-        <AppBar
+        <HeadRoom style={{zIndex:'101'}}>
+        <AppBar 
           title="Marvelous Vocabulary"
-          iconClassNameRight="muidocs-icon-navigation-expand-more"
+          iconElementLeft={<IconButton><NotificationsIcon /></IconButton>}
           onLeftIconButtonTouchTap={()=>{dispatch(drawerOpen());}}
-        />
-        <RaisedButton label="Dialog" onTouchTap={this.handleOpen} />
-       <Dialog
-         title="Dialog With Actions"
-         actions={actions}
-         modal={false}
-         open={this.state.open}
-         onRequestClose={this.handleClose}
-       >
-         The actions in this window were passed in as an array of React objects.
-       </Dialog>
+        >
+          <Toolbar style={{marginTop:'5px',backgroundColor:'transparent'}}>
+            <ToolbarGroup firstChild={true}>
+            <ToolbarSeparator style={{backgroundColor:'#fff'}} />
+            <i style={{margin:'5px'}} className="material-icons md-light">search</i>
+            <TextField style={{maxWidth:120}}
+              hintText="Hint Text"
+              hintStyle={{color:'rgba(255, 255, 255, 0.6)'}}
+              inputStyle={{color:'#fff'}}
+              id="text-search"
+              onChange={this.handleChange}
+            />
+            </ToolbarGroup>
+          </Toolbar>
+
+        </AppBar>
+      </HeadRoom>
+        { /*iconClassNameRight="muidocs-icon-navigation-expand-more"*/ }
+
+
         <DrawerCO/>
         {this.props.children}  {/*it will allow routes pages...*/}
         <Foot/>
+
       </div>
     );
   }
