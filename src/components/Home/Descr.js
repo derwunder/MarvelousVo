@@ -15,14 +15,14 @@ class Descr extends Component {
 
   }
   componentDidMount(){
-    this.walkwayfunc('#svg_ic');
-    this.walkwayfunc('#svg_ic2');
-    this.walkwayfunc('#svg_ic3');
+    this.walkwayfunc('#svg_ic',2500);
+    this.walkwayfunc('#svg_ic2',3500);
+    this.walkwayfunc('#svg_ic3',4500);
     }
-    walkwayfunc(idclass){
+    walkwayfunc(idclass,tm){
       new Walkway({
        selector: idclass,
-       duration: 5500,
+       duration: tm,
        easing: 'easeInOutCubic'
      }).draw(function() {
        console.dir('Finished diamond!');

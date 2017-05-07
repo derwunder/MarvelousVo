@@ -37,9 +37,9 @@ class WordBoxList extends Component {
 
     return (
       <div >
-        <Subheader style={{maxWidth: 1100,margin: 'auto'}} >
+        <Subheader style={{maxWidth: 900,margin: 'auto'}} >
           Most Popular</Subheader>
-        <div style={{maxWidth: 1200,margin:'auto',display:'flex',flexWrap:'wrap',justifyContent: 'space-around'}}>
+        <div style={{maxWidth: 1000,margin:'auto',display:'flex',flexWrap:'wrap',justifyContent: 'space-around'}}>
           <div style={{overflowX: 'auto',display:'flex',flexWrap:'nowrap',margin:5}}>
 
           <WordBox/>
@@ -47,9 +47,9 @@ class WordBoxList extends Component {
           <WordBox/><WordBox/><WordBox/><WordBox/>
           </div>
         </div>
-        <Subheader style={{maxWidth: 1100,margin: 'auto'}}>
+        <Subheader style={{maxWidth: 900,margin: 'auto'}}>
           Recent Added</Subheader>
-          <div style={{maxWidth: 1200,margin:'auto',display:'flex',flexWrap:'wrap',justifyContent: 'space-around'}}>
+          <div style={{maxWidth: 1000,margin:'auto',display:'flex',flexWrap:'wrap',justifyContent: 'space-around'}}>
             <div style={{overflowX: 'auto',display:'flex',flexWrap:'nowrap',margin:5}}>
 
             <WordBox/>
