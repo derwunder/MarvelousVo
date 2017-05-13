@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import {TextField,Toggle} from 'material-ui';
 
-import { teal600, teal800} from 'material-ui/styles/colors';
+import { teal600} from 'material-ui/styles/colors';
 
 
 class SignUp extends Component {

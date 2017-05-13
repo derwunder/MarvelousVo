@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
-import {Card, CardActions, CardHeader,
-   CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
-import {TextField,Toggle, List , ListItem , Divider, IconButton} from 'material-ui';
-import { teal600} from 'material-ui/styles/colors';
-import RaisedButton from 'material-ui/RaisedButton';
-
-import Walkway from 'walkway.js';
-
+import {
+  Card,
+  CardActions,
+  CardMedia,
+  CardTitle,
+  CardText
+} from 'material-ui/Card';
 import {
   Step,
   Stepper,
   StepLabel,
   StepContent,
 } from 'material-ui/Stepper';
+import {
+  IconButton,
+  RaisedButton,
+  FlatButton
+} from 'material-ui';
 
 class HowTo extends Component {
   constructor(props) {
@@ -105,7 +108,7 @@ class HowTo extends Component {
 
                 <Card style={{display:'inline-block',width:150, margin:10}}>
                     <CardMedia style={{borderRadius:5}}>
-                      <img style={{maxWidth:150,borderRadius:5}} src="https://firebasestorage.googleapis.com/v0/b/thamcook.appspot.com/o/images%2FhomeBox%2Fhoy549.jpg?alt=media&token=4bab98d9-1ec1-48b6-b6e2-02544cb8dbc0" />
+                      <img alt="i-ht" style={{maxWidth:150,borderRadius:5}} src="https://firebasestorage.googleapis.com/v0/b/thamcook.appspot.com/o/images%2FhomeBox%2Fhoy549.jpg?alt=media&token=4bab98d9-1ec1-48b6-b6e2-02544cb8dbc0" />
                     </CardMedia>
                     <CardTitle style={{padding:10}} title="Card title" />
                     <CardActions style={{textAlign:'right'}}>
@@ -124,7 +127,7 @@ class HowTo extends Component {
                     </CardActions>
                 </Card>
 
-              <div style={{verticalAlign:'top',display:'inline-block', maxWidth:200}}>
+              <div style={{marginLeft:10,verticalAlign:'top',display:'inline-block', maxWidth:200}}>
                 <p style={{textAlign:'justify',display:'inline-block', maxWidth:180}}>Open the menu, then go to your Word Boxes, and press the add Button</p>
                 <Card style={{display:'inline-block',maxWidth:200}}>
                   <CardText style={{textAlign:'center'}}>

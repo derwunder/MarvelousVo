@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
-import {TextField,Toggle, List , ListItem , Divider} from 'material-ui';
+import {Card, CardTitle, CardText} from 'material-ui/Card';
+import { List , ListItem } from 'material-ui';
 import { teal600} from 'material-ui/styles/colors';
 
 import Walkway from 'walkway.js';

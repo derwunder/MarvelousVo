@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
-import {RaisedButton,Drawer,Avatar,Badge} from 'material-ui';
+import {Drawer,Avatar,Badge} from 'material-ui';
 import {List, ListItem, Subheader, Divider} from 'material-ui';
+import {Link} from 'react-router';
 
 //import ActionHome from 'material-ui/svg-icons/action/home';
 import ActionViewList from 'material-ui/svg-icons/action/view-list';
@@ -17,9 +18,6 @@ import {white} from 'material-ui/styles/colors';
 import {drawerOpen} from '../../actions/Actions';
 
 class DrawerCO extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     var {dispatch,drawerReducer} = this.props;
@@ -37,7 +35,9 @@ class DrawerCO extends Component {
           </List>
           <List>
             <Subheader>Start</Subheader>
-            <ListItem primaryText="Word Boxes" leftIcon={<ActionViewModule/>} />
+            <Link style={{textDecoration:'none'}} to="/WordBoxes" onClick={()=>dispatch(drawerOpen())}>
+              <ListItem primaryText="Word Boxes" leftIcon={<ActionViewModule/>} />
+            </Link>
             <ListItem primaryText="My Idioms" leftIcon={<ActionViewList/>} />
             <ListItem primaryText="My Learning" leftIcon={<ActionAssignment/>} />
             <Divider/>

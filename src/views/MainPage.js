@@ -5,9 +5,8 @@ import {connect} from 'react-redux';
 import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import Foot from '../components/Foot';
 import {AppBar,
-   Toolbar, ToolbarGroup, ToolbarTitle, ToolbarSeparator,
-   DropDownMenu, MenuItem, FontIcon, TextField,
-   RaisedButton ,FlatButton, Dialog, IconButton} from 'material-ui';
+   Toolbar, ToolbarGroup,  ToolbarSeparator, TextField,
+    IconButton} from 'material-ui';
 import DrawerCO from '../components/Drawer/DrawerCO';
 
 import {drawerOpen} from '../actions/Actions';
@@ -43,7 +42,7 @@ class MainPage extends Component {
     return (
       <div>
         <HeadRoom style={{zIndex:'101'}}>
-        <AppBar 
+        <AppBar
           title="Marvelous Vocabulary"
           iconElementLeft={<IconButton><NotificationsIcon /></IconButton>}
           onLeftIconButtonTouchTap={()=>{dispatch(drawerOpen());}}
