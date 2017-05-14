@@ -38,7 +38,7 @@ class UserPage extends Component {
           iconElementLeft={<IconButton><MenuIcon /></IconButton>}
           onLeftIconButtonTouchTap={()=>{dispatch(drawerOpen());}}
         >
-          <Toolbar style={{marginTop:'5px',backgroundColor:'transparent'}}>
+          <Toolbar style={{marginTop:'5px',backgroundColor:'transparent',paddingLeft:24,paddingRight:0}}>
             <ToolbarGroup firstChild={true}>
             {/*}<ToolbarSeparator style={{backgroundColor:'#fff'}} />*/}
               <IconButton  style={{width:30,height:30,marginRight:0,padding:0,border:0}}>
@@ -73,6 +73,9 @@ class UserPage extends Component {
                   </IconButton>
                 } value="3" primaryText="Favorite" />
               </IconMenu>
+              <IconButton  style={{width:30,height:30,marginRight:0,padding:0,border:0}}>
+                <i style={{margin:'5px'}} className="material-icons md-light">view_stream</i>
+              </IconButton>
             </ToolbarGroup>
           </Toolbar>
 
