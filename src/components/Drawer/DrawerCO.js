@@ -10,6 +10,7 @@ import ActionViewList from 'material-ui/svg-icons/action/view-list';
 import ActionViewModule from 'material-ui/svg-icons/action/view-module';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import ActionDashBoard from 'material-ui/svg-icons/action/dashboard';
+import ImageViewComfy from 'material-ui/svg-icons/image/view-comfy';
 import ComContacts from 'material-ui/svg-icons/communication/contacts';
 import ActionLang from 'material-ui/svg-icons/action/language';
 import Notifications from 'material-ui/svg-icons/social/notifications';
@@ -36,17 +37,25 @@ class DrawerCO extends Component {
           <List>
             <Subheader>Start</Subheader>
             <Link style={{textDecoration:'none'}} to="/WordBoxes" onClick={()=>dispatch(drawerOpen())}>
-              <ListItem primaryText="Word Boxes" leftIcon={<ActionViewModule/>} />
+              <ListItem primaryText="Word Boxes" leftIcon={<ImageViewComfy/>} />
             </Link>
-            <ListItem primaryText="My Idioms" leftIcon={<ActionViewList/>} />
-            <ListItem primaryText="My Learning" leftIcon={<ActionAssignment/>} />
+            <ListItem primaryText="My Idioms" leftIcon={<ActionViewModule/>} />
+            <Link style={{textDecoration:'none'}} to="/MyLearning" onClick={()=>dispatch(drawerOpen())}>
+              <ListItem primaryText="My Learning" leftIcon={<ActionAssignment/>} />
+            </Link>
             <Divider/>
             <Subheader>Contacts</Subheader>
-            <ListItem primaryText="Friend Board" leftIcon={<ActionDashBoard/>} />
-            <ListItem primaryText="Friend List" leftIcon={<ComContacts/>} />
+            <Link style={{textDecoration:'none'}} to="/FriendBoard" onClick={()=>dispatch(drawerOpen())}>
+              <ListItem primaryText="Friend Board" leftIcon={<ActionDashBoard/>} />
+            </Link>
+            <Link style={{textDecoration:'none'}} to="/FriendList" onClick={()=>dispatch(drawerOpen())}>
+              <ListItem primaryText="Friend List" leftIcon={<ComContacts/>} />
+            </Link>
             <Divider/>
             <Subheader>World</Subheader>
-            <ListItem primaryText="Global Board" leftIcon={<ActionLang/>} />
+            <Link style={{textDecoration:'none'}} to="/GlobalBoard" onClick={()=>dispatch(drawerOpen())}>
+              <ListItem primaryText="Global Board" leftIcon={<ActionLang/>} />
+            </Link>
           </List>
         </Drawer>
       </div>

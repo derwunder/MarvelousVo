@@ -8,12 +8,7 @@ import '../../css/wordbox.css';
 
 import {Subheader} from 'material-ui';
 
-
-import StackGrid, { transitions } from "react-stack-grid";
-const { scaleDown } = transitions;
-
-
-class WordBoxList extends Component {
+class WordBoxListLine extends Component {
   componentWillMount(){
 
   }
@@ -39,39 +34,34 @@ class WordBoxList extends Component {
     /*var recipeItemsLoad = (item,index)=>{
         return <RecipeItem key={item.id} item={item}/>;
     };*/
-    var value =true;var value2 =false;
+
     return (
-      <StackGrid
-      columnWidth={150}
-      monitorImagesLoaded={true} //this props helps monitorin images load - help height size
-      appear={scaleDown.appear}
-     appeared={scaleDown.appeared}
-     enter={scaleDown.enter}
-     entered={scaleDown.entered}
-     leaved={scaleDown.leaved}
-    >
-      <div key="key1" >
-        <WordBox  pic={value}/>
+      <div >
+        <Subheader style={{maxWidth: 900,margin: 'auto'}} >
+          Most Popular</Subheader>
+        <div style={{maxWidth: 1000,margin:'auto',display:'flex',flexWrap:'wrap',justifyContent: 'space-around'}}>
+          <div style={{overflowX: 'auto',display:'flex',flexWrap:'nowrap',margin:5}}>
+
+          <WordBox/>
+          <WordBox/><WordBox/><WordBox/><WordBox/>
+          <WordBox/><WordBox/><WordBox/><WordBox/>
+          </div>
+        </div>
+        <Subheader style={{maxWidth: 900,margin: 'auto'}}>
+          Recent Added</Subheader>
+          <div style={{maxWidth: 1000,margin:'auto',display:'flex',flexWrap:'wrap',justifyContent: 'space-around'}}>
+            <div style={{overflowX: 'auto',display:'flex',flexWrap:'nowrap',margin:5}}>
+
+            <WordBox/>
+            <WordBox/><WordBox/><WordBox/><WordBox/>
+            <WordBox/><WordBox/><WordBox/><WordBox/>
+            </div>
+          </div>
+
+
+        {/*recipeItemsLoad()*/}
+      {/*recipeBoxReducer.map(recipeItemsLoad)*/}
       </div>
-      <div key="key2">
-        <WordBox  pic={value2}/>
-      </div>
-      <div key="key3" >
-        <WordBox  pic={value}/>
-      </div>
-      <div key="key4" >
-        <WordBox  pic={value}/>
-      </div>
-      <div key="key5" >
-        <WordBox  pic={value2}/>
-      </div>
-      <div key="key6" >
-        <WordBox  pic={value}/>
-      </div>
-      <div key="key7" > {/*style={{display:'inline-block',verticalAlign:'top'}}*/}
-        <WordBox  pic={value2}/>
-      </div>
-    </StackGrid>
     );
   }
 }
@@ -80,4 +70,4 @@ export default connect(
   (state) => {
     return state;
   }
-)(WordBoxList);
+)(WordBoxListLine);

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import WordBoxList from '../components/WordBoxes/WordBoxList';
+import WordBoxListLine from '../components/WordBoxes/WordBoxListLine';
 import SignUp from '../components/Home/SignUp';
 import Descr from '../components/Home/Descr';
 import HowTo from '../components/Home/HowTo';
@@ -13,7 +13,7 @@ class Home extends Component {
         <SignUp/>
         <Descr/>
         <HowTo/>
-        <WordBoxList/>
+        <WordBoxListLine/>
       </div>
     );
   }
