@@ -2,26 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 
+import {auth} from './firebase/constants';
 import {configureStore} from './store/ConfigStore';
-import {login} from './actions/Actions';
+import {login,logout} from './actions/Actions';
+import {hashHistory} from 'react-router';
 
-//import App from './App';
 import './index.css';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { teal600, teal800, tealA700,
-  grey100, grey400, grey500,
-  white, darkBlack} from 'material-ui/styles/colors';
+import {teal600, teal800, tealA700,grey100, grey400, grey500,white, darkBlack} from 'material-ui/styles/colors';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 
 import Router from './Router';
 
 var store = configureStore();
 
-//store.dispatch(action()); to Initial some
-var userData ={uid:'user.uid',email:'user.email'};
-
-store.dispatch(login(userData));
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -36,8 +33,24 @@ const muiTheme = getMuiTheme({
   }
 });
 
-import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
+//var userData ={uid:'user.uid',email:'user.email'};
+//store.dispatch(login(userData));
+
+ auth.onAuthStateChanged(function(user){
+  if(user){
+    var userData ={uid:user.uid,
+        email:user.email,
+        displayName:user.displayName,
+        photoURL:user.photoURL};
+    //console.log("User UID: "+JSON.stringify(user));
+    store.dispatch(login(userData));
+    //store.dispatch(startAddTodos());
+    //hashHistory.replace('/WordBoxes'); //this should be an action "Edit Mode"
+  }else{
+    store.dispatch(logout());
+    //hashHistory.replace('/');  //this should be an action "Exit Edit Mode"
+  }
+});
 
 
 ReactDOM.render(

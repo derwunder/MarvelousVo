@@ -1,4 +1,4 @@
-
+import {auth, github} from '../firebase/constants';
 //import firebase here to handle async task
 
 export var drawerOpen = ()=>{
@@ -14,9 +14,9 @@ export var login = (userData)=>{
   };
 };
 
-/*export var startLoginGitHub = ()=>{
+export var startLoginGitHub = ()=>{
   return (dispatch, getState)=>{
-      return firebase.auth().signInWithPopup(githubProvider)
+      return auth.signInWithPopup(github)
         .then(
           function(result) {
             console.log('Login Worked: ', result);
@@ -28,6 +28,7 @@ export var login = (userData)=>{
       );
     };
 };
+/*
 export var startLoginFace = ()=>{
   return (dispatch, getState)=>{
       return firebase.auth().signInWithPopup(faceBookProvider)

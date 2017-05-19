@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Router, Route, IndexRoute, hashHistory} from 'react-router';
+import {auth} from './firebase/constants';
 
 import MainPage from './views/MainPage';
 import Home from './views/Home';
@@ -11,14 +12,36 @@ import FriendList from './views/FriendList';
 import FriendBoard from './views/FriendBoard';
 import GlobalBoard from './views/GlobalBoard';
 
+
+
+var requireLogin = (nextState,replace,next)=>{
+  console.log("value view: "+auth.currentUser);
+ if(!auth.currentUser){
+   replace('/');
+ }
+   next();
+};
+var requireLogout = (nextState,replace,next)=>{
+ console.log("value view: "+auth.currentUser);
+ if(auth.currentUser){
+   replace('/WordBoxes');
+   console.log("value view in: "+auth.currentUser);
+
+ }
+   next();
+};
+
 class Routes extends Component {
+
   render() {
+
+
     return (
       <Router history={hashHistory}>
-        <Route path="/" component={MainPage}>
-          <IndexRoute component={Home}/>
+        <Route path="/" component={MainPage} >
+          <IndexRoute component={Home} onEnter={requireLogout}/>
         </Route>
-        <Route path="/WordBoxes" component={UserPage}>
+        <Route path="/WordBoxes" component={UserPage} onEnter={requireLogin}>
           <IndexRoute component={WordBoxes}/>
           <Route path="/WordBoxes/:wordListN" component={WordList}/>
           <Route path="/MyLearning" component={MyLearning}/>
