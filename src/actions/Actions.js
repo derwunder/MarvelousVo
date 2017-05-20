@@ -1,4 +1,4 @@
-import {auth, github} from '../firebase/constants';
+import {auth, github,google} from '../firebase/constants';
 //import firebase here to handle async task
 
 export var drawerOpen = ()=>{
@@ -14,6 +14,20 @@ export var login = (userData)=>{
   };
 };
 
+export var startLoginGoogle = ()=>{
+  return (dispatch, getState)=>{
+      return auth.signInWithPopup(google)
+        .then(
+          function(result) {
+            console.log('Login Worked: ', result);
+          })
+        .catch(
+          function(error) {
+            console.log('Login unable: ', error);
+          }
+      );
+    };
+};
 export var startLoginGitHub = ()=>{
   return (dispatch, getState)=>{
       return auth.signInWithPopup(github)
@@ -28,6 +42,37 @@ export var startLoginGitHub = ()=>{
       );
     };
 };
+
+
+export var startLoginEmail = (email, password)=>{
+  return (dispatch, getState)=>{
+      return auth.signInWithEmailAndPassword(email, password)
+        .then(
+          function(result) {
+            console.log('Login Worked: ', result);
+          })
+        .catch(
+          function(error) {
+            console.log('Login unable: ', error);
+          }
+      );
+    };
+};
+export var createAccount = (email, password)=>{
+  return (dispatch, getState)=>{
+      return auth.createUserWithEmailAndPassword(email, password)
+        .then(
+          function(result) {
+            console.log('Create Worked: ', result);
+          })
+        .catch(
+          function(error) {
+            console.log('Create unable: ', error);
+          }
+      );
+    };
+};
+
 /*
 export var startLoginFace = ()=>{
   return (dispatch, getState)=>{

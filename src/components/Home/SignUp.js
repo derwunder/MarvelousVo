@@ -7,7 +7,7 @@ import {TextField,Toggle} from 'material-ui';
 
 import { teal600} from 'material-ui/styles/colors';
 
-import {startLoginGitHub} from '../../actions/Actions';
+import {startLoginGoogle,startLoginGitHub, startLoginEmail, createAccount} from '../../actions/Actions';
 
 
 class SignUp extends Component {
@@ -15,7 +15,9 @@ class SignUp extends Component {
    super(props);
     this.state = {
      expanded: false,
-     newAccount: false
+     newAccount: false,
+     txName:'',txLast:'',
+     txEmail:'',txPass:''
     };
   }
   handleExpandChange = (expanded) => {
@@ -41,7 +43,12 @@ class SignUp extends Component {
   onLoginGitH = () =>{
     var {dispatch} = this.props;
     dispatch(startLoginGitHub());
-  }
+  };
+  onLoginGoogle = () =>{
+    var {dispatch} = this.props;
+    dispatch(startLoginGoogle());
+  };
+
 
   render() {
 
@@ -50,7 +57,7 @@ class SignUp extends Component {
         <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange} style={{margin:10,maxWidth:280}}>
     <CardTitle title="Sign In" subtitle="Let's grow your vocabulary" />
     <CardText>
-      <i style={{margin:'5px',cursor:'pointer'}} className="fa fa-google material-icons md-48 md-dark" aria-hidden="true"></i>
+      <i onClick={this.onLoginGoogle} style={{margin:'5px',cursor:'pointer'}} className="fa fa-google material-icons md-48 md-dark" aria-hidden="true"></i>
       <i style={{margin:'5px',cursor:'pointer'}} className="fa fa-facebook-official material-icons md-48 md-dark" aria-hidden="true"></i>
       <i onClick={this.onLoginGitH} style={{margin:'5px',cursor:'pointer'}} className="fa fa-github  material-icons md-48 md-dark" aria-hidden="true"></i>
       <i style={{margin:'5px',cursor:'pointer', color:this.state.expanded?teal600:''}} onClick={this.handleToggle} className="fa fa-envelope material-icons md-48 md-dark" aria-hidden="true"></i>
@@ -67,23 +74,31 @@ class SignUp extends Component {
       <TextField style={{margin:5, maxWidth:100, display:(this.state.newAccount?'inline-block':'none')}}
         hintText="Name"  floatingLabelText="Name"
         id="su_name"
-        onChange={()=>{}} />
+        onChange={(e)=>{this.setState({txName: e.target.value});}} />
       <TextField style={{margin:5, maxWidth:100, display:(this.state.newAccount?'inline-block':'none')}}
         hintText="Last Name"  floatingLabelText="Last Name"
         id="su_last"
-        onChange={()=>{}} />
+        onChange={(e)=>{this.setState({txLast: e.target.value});}} />
       <TextField style={{margin:5, maxWidth:200}}
         hintText="eMail"  floatingLabelText="eMail"
         id="su_email"
-        onChange={()=>{}} />
+        onChange={(e)=>{this.setState({txEmail: e.target.value});}} />
       <TextField style={{margin:5, maxWidth:200}}
         hintText="Password"  floatingLabelText="Password"
         id="su_password" type="password"
-        onChange={()=>{}}  />
+        onChange={(e)=>{this.setState({txPass: e.target.value});}}  />
     </CardText>
     <CardActions expandable={true}>
-      <FlatButton label="Create Account"  style={{display:(this.state.newAccount?'block':'none')}}/>
-      <FlatButton label="LogIn" style={{display:(!this.state.newAccount?'block':'none')}} />
+      <FlatButton onTouchTap={ () => {
+        var {dispatch} = this.props;
+        dispatch(createAccount(this.state.txEmail,this.state.txPass));
+        } }
+        label="Create Account"  style={{display:(this.state.newAccount?'block':'none')}}/>
+      <FlatButton onTouchTap={ () => {
+        var {dispatch} = this.props;
+        dispatch(startLoginEmail(this.state.txEmail,this.state.txPass));
+        } }
+        label="LogIn" style={{display:(!this.state.newAccount?'block':'none')}} />
     </CardActions>
   </Card>
       </div>
