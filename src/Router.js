@@ -39,9 +39,9 @@ class Routes extends Component {
     return (
       <Router history={hashHistory}>
         <Route path="/" component={MainPage} >
-          <IndexRoute component={Home} onEnter={requireLogout}/>
+          <IndexRoute component={Home} />
         </Route>
-        <Route path="/WordBoxes" component={UserPage} onEnter={requireLogin}>
+        <Route path="/WordBoxes" component={UserPage} >
           <IndexRoute component={WordBoxes}/>
           <Route path="/WordBoxes/:wordListN" component={WordList}/>
           <Route path="/MyLearning" component={MyLearning}/>

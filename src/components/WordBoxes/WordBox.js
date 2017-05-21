@@ -2,13 +2,19 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
 import {Card, CardActions, CardMedia, CardTitle} from 'material-ui/Card';
-import {IconButton} from 'material-ui';
+import {MenuItem,IconMenu,IconButton, Badge} from 'material-ui';
 
 class WordBox extends Component {
-
-  componentWillMount(){
-
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.handleChangeMultiple=this.handleChangeMultiple.bind(this);
   }
+  handleChangeMultiple = (event, value) => {
+      this.setState({
+        valueMultiple: value,
+      });
+    };
   render() {
     return (
       <div  className="h">
@@ -21,20 +27,50 @@ class WordBox extends Component {
           : <div/>
         }
 
-            <CardTitle style={{padding:10}} title="Card title" />
+            <CardTitle style={{padding:5}} title="Card title" />
             <CardActions style={{textAlign:'right'}}>
-              <IconButton  style={{width:30,height:30,marginRight:0,padding:0,border:0}}><i
-                 className="material-icons md-24 md-dark md-active" aria-hidden="true">bookmark</i>
+              {/*}<Badge style={{padding:11,margin:0,left:18,position:'absolute'}} badgeContent={4} primary={true}  />*/}
+              <IconButton  style={{left:14,position:'absolute',width:30,height:30,marginRight:0,padding:0,border:0}}><i
+                 className="material-icons md-22 md-dark md-active" aria-hidden="true">assignment</i>
                </IconButton>
+               {/*}<IconButton  style={{width:30,height:30,marginRight:0,padding:0,border:0}}><i
+                  className="material-icons md-24 md-dark md-active" aria-hidden="true">assignment</i>
+                </IconButton>
                 {/*}<IconButton  style={{width:30,height:30,marginRight:0,padding:0,border:0}}><i
                    className="material-icons md-24 md-dark" aria-hidden="true">supervisor_account</i>
                  </IconButton>
                 <IconButton  style={{width:30,height:30,marginRight:0,padding:0,border:0}}><i
                    className="material-icons md-24 md-dark" aria-hidden="true">language</i>
                  </IconButton>*/}
-                <IconButton  style={{width:30,height:30,marginRight:0,padding:0,border:0}}><i
-                   className="material-icons md-24 md-dark" aria-hidden="true">more_vert</i>
-                 </IconButton>
+                 <IconMenu
+                   anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                   targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                   iconButtonElement={
+                     <IconButton  style={{width:30,height:30,marginRight:0,padding:0,border:0}}>
+                       <i style={{margin:'5px'}} className="material-icons md-dark">more_vert</i>
+                     </IconButton>
+                   }
+                   onChange={this.handleChangeMultiple}
+                   value={this.state.valueMultiple}
+                   multiple={true}
+                 >
+                   <MenuItem leftIcon={
+                     <IconButton  style={{marginRight:0,padding:0,border:0}}>
+                       <i style={{margin:'5px'}} className="material-icons md-dark md-24">supervisor_account</i>
+                     </IconButton>
+                   } value="1" primaryText="Friend Post" />
+                   <MenuItem leftIcon={
+                     <IconButton  style={{marginRight:0,padding:0,border:0}}>
+                       <i style={{margin:'5px'}} className="material-icons md-dark md-24">language</i>
+                     </IconButton>
+                   } value="2" primaryText="Global Post" />
+                   <MenuItem leftIcon={
+                     <IconButton  style={{marginRight:0,padding:0,border:0}}>
+                       <i style={{margin:'5px'}} className="material-icons md-dark md-24">favorite</i>
+                     </IconButton>
+                   } value="3" primaryText="Favorite" />
+                 </IconMenu>
+
             </CardActions>
         </Card>
       </div>
