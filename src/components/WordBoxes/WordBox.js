@@ -27,7 +27,11 @@ class WordBox extends Component {
           : <div/>
         }
 
-            <CardTitle style={{padding:5}} title="Card title" />
+            <CardTitle style={{padding:5}} title={
+              <span>
+              <i style={{margin:5}} className="fa fa-star material-icons md-18 md-dark" aria-hidden="true"></i>Card Title
+              </span>
+            } />
             <CardActions style={{textAlign:'right'}}>
               {/*}<Badge style={{padding:11,margin:0,left:18,position:'absolute'}} badgeContent={4} primary={true}  />*/}
               <IconButton  style={{left:14,position:'absolute',width:30,height:30,marginRight:0,padding:0,border:0}}><i
@@ -56,19 +60,19 @@ class WordBox extends Component {
                  >
                    <MenuItem leftIcon={
                      <IconButton  style={{marginRight:0,padding:0,border:0}}>
+                       <i style={{margin:'5px'}} className="material-icons md-dark md-24">favorite</i>
+                     </IconButton>
+                   } value="1" primaryText="Favorite" />
+                   <MenuItem leftIcon={
+                     <IconButton  style={{marginRight:0,padding:0,border:0}}>
                        <i style={{margin:'5px'}} className="material-icons md-dark md-24">supervisor_account</i>
                      </IconButton>
-                   } value="1" primaryText="Friend Post" />
+                   } value="2" primaryText="Friend Post" />
                    <MenuItem leftIcon={
                      <IconButton  style={{marginRight:0,padding:0,border:0}}>
                        <i style={{margin:'5px'}} className="material-icons md-dark md-24">language</i>
                      </IconButton>
-                   } value="2" primaryText="Global Post" />
-                   <MenuItem leftIcon={
-                     <IconButton  style={{marginRight:0,padding:0,border:0}}>
-                       <i style={{margin:'5px'}} className="material-icons md-dark md-24">favorite</i>
-                     </IconButton>
-                   } value="3" primaryText="Favorite" />
+                   } value="3" primaryText="Global Post" />
                  </IconMenu>
 
             </CardActions>
