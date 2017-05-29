@@ -13,10 +13,9 @@ import StackGrid, { transitions } from "react-stack-grid";
 const { scaleDown } = transitions;
 
 
-class WordBoxList extends Component {
-  componentWillMount(){
 
-  }
+class WordBoxList extends Component {
+
   render() {  /*overlap  es un prop en Badge*/
 
     //var { searchRecipeReducer}=this.props;
@@ -39,8 +38,24 @@ class WordBoxList extends Component {
     /*var recipeItemsLoad = (item,index)=>{
         return <RecipeItem key={item.id} item={item}/>;
     };*/
+
+var {wordBoxesReducer, authReducer}=this.props;
+
+    var wordBoxesLoad = (itemRender) =>{
+      //console.log("you are here"+JSON.stringify(itemRender));
+
+      return (
+        itemRender.map((item,index)=>{
+          if(item.hasOwnProperty('id'))
+          return <div key={"key"+index}>
+            <WordBox pic={value2} item={item}/></div>
+        })
+      );
+    };
+
     var value =true;var value2 =false;
-    return (
+    return (<div>
+
       <StackGrid
       columnWidth={150}
       monitorImagesLoaded={true} //this props helps monitorin images load - help height size
@@ -50,28 +65,10 @@ class WordBoxList extends Component {
      entered={scaleDown.entered}
      leaved={scaleDown.leaved}
     >
-      <div key="key1" >
-        <WordBox  pic={value}/>
-      </div>
-      <div key="key2">
-        <WordBox  pic={value2}/>
-      </div>
-      <div key="key3" >
-        <WordBox  pic={value}/>
-      </div>
-      <div key="key4" >
-        <WordBox  pic={value}/>
-      </div>
-      <div key="key5" >
-        <WordBox  pic={value2}/>
-      </div>
-      <div key="key6" >
-        <WordBox  pic={value}/>
-      </div>
-      <div key="key7" > {/*style={{display:'inline-block',verticalAlign:'top'}}*/}
-        <WordBox  pic={value2}/>
-      </div>
-    </StackGrid>
+
+      {wordBoxesLoad(wordBoxesReducer)}{/*style={{display:'inline-block',verticalAlign:'top'}}*/}
+
+    </StackGrid></div>
     );
   }
 }

@@ -1,7 +1,7 @@
 //import {combineReducers,createStore} from 'redux';
 import * as redux from 'redux';
 import thunk from 'redux-thunk';
-import {authReducer,drawerReducer} from '../reducers/Reducers';
+import {authReducer,regularReducer,wordBoxesReducer} from '../reducers/Reducers';
 
 import { createStore, applyMiddleware, compose } from 'redux';
 //const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -10,7 +10,8 @@ import { createStore, applyMiddleware, compose } from 'redux';
 export var configureStore = (initialState = {}) =>{
   var reducer= redux.combineReducers({
     authReducer: authReducer,
-    drawerReducer: drawerReducer
+    regularReducer: regularReducer,
+    wordBoxesReducer: wordBoxesReducer
   });
 
   /*var store = redux.createStore(

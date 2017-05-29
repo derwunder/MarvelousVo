@@ -21,12 +21,12 @@ import {drawerOpen} from '../../actions/Actions';
 class DrawerCO extends Component {
 
   render() {
-    var {dispatch,drawerReducer} = this.props;
+    var {dispatch,regularReducer} = this.props;
 
     return (
       <div>
         <Drawer docked={false} //some
-          open={drawerReducer.drawerOpen}
+          open={regularReducer.drawerOpen}
           onRequestChange={(open) => dispatch(drawerOpen()) }>
           <List style={{background:"#004D40"}}>
             <ListItem primaryText="Der Wunder Nunez"

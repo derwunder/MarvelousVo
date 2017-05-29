@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import {connect} from 'react-redux';
 //import '../css/home.css';
 import WordBoxList from '../components/WordBoxes/WordBoxList';
 import WordBoxAdd from '../components/WordBoxes/WordBoxAdd';

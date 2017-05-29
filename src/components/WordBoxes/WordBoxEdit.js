@@ -3,31 +3,21 @@ import {connect} from 'react-redux';
 
 import {FloatingActionButton, Dialog,FlatButton} from 'material-ui';
 import {TextField, Toggle} from 'material-ui';
+import {wordBoxEditorOpen,startWordBoxUpdate} from '../../actions/ActWordBox';
+//import {createWordBox} from '../../actions/ActWordBox';
 
-import {createWordBox} from '../../actions/ActWordBox';
-
-class WordBoxAdd extends Component {
+class WordBoxEdit extends Component {
   constructor(props) {
     super(props);
-    this.state = {open:false,
-      boxName:'',
-      favorite:false,
-      fBoard:false,
-      gBoard:false
+    this.state = {
+      boxName:this.props.item.boxName,
+      favorite:this.props.item.favorite,
+      fBoard:this.props.item.fBoard,
+      gBoard:this.props.item.gBoard
     };
     this.handleChangeFav=this.handleChangeFav.bind(this);
     this.handleSave=this.handleSave.bind(this);
   }
-  restoreState =()=>{
-      this.setState({boxName: ''});
-      this.setState({favorite: false});
-      this.setState({fBoard: false});
-      this.setState({gBoard: false});
-  };
-  handleOpen = () => {
-    this.restoreState();
-      this.setState({open: !this.state.open});
-    };
 
     handleChangeFav  () {
       this.setState({favorite: !this.state.favorite});
@@ -40,27 +30,27 @@ class WordBoxAdd extends Component {
     }
     handleSave  () {
       var {dispatch} = this.props;
-      var newItem ={
+      var itemUpdates ={
       boxName:this.state.boxName,
       favorite:this.state.favorite,
       fBoard:this.state.fBoard,
       gBoard:this.state.gBoard
     };
-    dispatch(createWordBox(newItem));
-    this.restoreState();
-    this.setState({open: !this.state.open});
+    dispatch(startWordBoxUpdate(this.props.item.id,itemUpdates));
+    this.props.handleEditor(this.state.favorite,this.state.fBoard,this.state.gBoard);
+    //this.props.updateState(this.state.favorite,this.state.fBoard,this.state.gBoard);
     }
 
   render() {
-
+    var {dispatch,regularReducer} = this.props;
     const actions = [
       <FlatButton
         label="Cancel"
         primary={true}
-        onTouchTap={this.handleOpen}
+        onTouchTap={this.props.handleEditor}
       />,
       <FlatButton
-        label="Submit"
+        label="Update"
         primary={true}
         keyboardFocused={true}
         onTouchTap={this.handleSave}
@@ -68,24 +58,21 @@ class WordBoxAdd extends Component {
     ];
 
     return (
-      <div style={{height:75}}>
-        <FloatingActionButton onTouchTap={this.handleOpen} style={{position:'fixed',bottom:10,right:10,zIndex:2}}>
-          <i className="material-icons md-24 md-light " aria-hidden="true">add</i>
-    </FloatingActionButton>
+      <div>
 
     <Dialog contentStyle={{width:'95%',maxWidth:350}}
-          title="New Word Box"
+          title="Word Box Editor"
           actions={actions}
           modal={false}
-          open={this.state.open}
-          onRequestClose={this.handleOpen}
+          open={this.props.editor}
+          onRequestClose={this.props.handleEditor}
         >
       <TextField style={{margin:5}}
         hintText="Box Name"  floatingLabelText="Box Name"
-        id="box_name"
+        id="box_name" value={this.state.boxName}
         onChange={(e)=>{ this.setState({boxName: e.target.value});}} />
       <Toggle style={{maxWidth:300,marginTop:15}}
-        onToggle={this.handleChangeFav}
+        onToggle={this.handleChangeFav} defaultToggled={this.props.item.favorite}
         label={<span >
           <i style={{marginRight:5,marginLeft:5}}
             className={this.state.favorite?"material-icons md-20 md-dark md-active":"material-icons md-20 md-dark"}
@@ -93,7 +80,7 @@ class WordBoxAdd extends Component {
           </span>}
       labelPosition="left" />
       <Toggle style={{maxWidth:300,marginTop:15}}
-        onToggle={this.handleChangeFB}
+        onToggle={this.handleChangeFB} defaultToggled={this.props.item.fBoard}
       label={<span >
         <i style={{marginRight:5,marginLeft:5}}
           className={this.state.fBoard?"material-icons md-20 md-dark md-active":"material-icons md-20 md-dark"}
@@ -101,7 +88,7 @@ class WordBoxAdd extends Component {
       </span>}
       labelPosition="left" />
       <Toggle style={{maxWidth:300,marginTop:15}}
-        onToggle={this.handleChangeGB}
+        onToggle={this.handleChangeGB} defaultToggled={this.props.item.gBoard}
       label={<span >
         <i style={{marginRight:5,marginLeft:5}}
           className={this.state.gBoard?"material-icons md-20 md-dark md-active":"material-icons md-20 md-dark"}
@@ -119,4 +106,4 @@ export default connect(
   (state) => {
     return state;
   }
-)(WordBoxAdd);
+)(WordBoxEdit);

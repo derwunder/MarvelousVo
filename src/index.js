@@ -5,6 +5,7 @@ import {Provider} from 'react-redux';
 import {auth} from './firebase/constants';
 import {configureStore} from './store/ConfigStore';
 import {login,logout} from './actions/Actions';
+import {startDLWordBoxes} from './actions/ActWordBox';
 import {hashHistory} from 'react-router';
 
 import './index.css';
@@ -17,7 +18,7 @@ injectTapEventPlugin();
 
 import Router from './Router';
 
-var store = configureStore();
+var store = configureStore({regularReducer:{wordBoxEditorOpen:false}});
 
 
 const muiTheme = getMuiTheme({
@@ -35,7 +36,6 @@ const muiTheme = getMuiTheme({
 
 //var userData ={uid:'user.uid',email:'user.email'};
 //store.dispatch(login(userData));
-
  auth.onAuthStateChanged(function(user){
   if(user){
     var userData ={uid:user.uid,
@@ -44,6 +44,7 @@ const muiTheme = getMuiTheme({
         photoURL:user.photoURL};
     //console.log("User UID: "+JSON.stringify(user));
     store.dispatch(login(userData));
+    store.dispatch(startDLWordBoxes());
     //store.dispatch(startAddTodos());
     //hashHistory.replace('/WordBoxes'); //this should be an action "Edit Mode"
   }else{

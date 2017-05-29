@@ -13,7 +13,7 @@ class Home extends Component {
         <SignUp/>
         <Descr/>
         <HowTo/>
-        <WordBoxListLine/>
+        
       </div>
     );
   }
