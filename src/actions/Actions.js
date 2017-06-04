@@ -25,7 +25,7 @@ export var startLoginGoogle = ()=>{
           function(error) {
             console.log('Login unable: ', error);
           }
-      );
+        );
     };
 };
 export var startLoginGitHub = ()=>{
@@ -92,6 +92,16 @@ export var startLoginFace = ()=>{
 export var logout = ()=>{
   return{
     type:'LOGOUT',
+  };
+};
+
+export var logoutFB = ()=>{
+  return (dispatch,getState)=>{
+   return  auth.signOut().then(function() {
+      console.log("Log Out");  // Sign-out successful.
+    }, function(error) {
+     console.log("Error logout "+error);  // An error happened.
+    });
   };
 };
 

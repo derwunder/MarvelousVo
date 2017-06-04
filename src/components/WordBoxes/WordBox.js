@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 
 import {Card, CardActions, CardMedia, CardTitle} from 'material-ui/Card';
 import {MenuItem,IconMenu,IconButton, Badge,Divider} from 'material-ui';
 
 import WordBoxEdit from './WordBoxEdit';
 import WordBoxDelete from './WordBoxDelete';
-import {wordBoxEditorOpen} from '../../actions/ActWordBox';
+import {startWordBoxUpdate} from '../../actions/ActWordBox';
+
+
+import moment from 'moment';
 
 class WordBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
       valueMultiple: [
-        this.props.item.favorite?'1':'',
-        this.props.item.fBoard?'2':'',
-        this.props.item.gBoard?'3':''
+        this.props.item.favorite?'1':'', this.props.item.fBoard?'2':'', this.props.item.gBoard?'3':''
       ],
       wordBoxEditor:false,
       wordBoxEraser:false
@@ -28,9 +30,7 @@ class WordBox extends Component {
   handleEraser (){
     this.setState({
       valueMultiple: [
-        this.props.item.favorite?'1':'',
-        this.props.item.fBoard?'2':'',
-        this.props.item.gBoard?'3':''
+        this.props.item.favorite?'1':'',this.props.item.fBoard?'2':'', this.props.item.gBoard?'3':''
       ]
     });
     this.setState({wordBoxEraser: !this.state.wordBoxEraser});
@@ -38,18 +38,13 @@ class WordBox extends Component {
   handleEditor (rFa,rFB,rGB) {
     if(rFB!==undefined){
       this.setState({
-        valueMultiple: [
-          rFa?'1':'',
-          rFB?'2':'',
-          rGB?'3':''
+        valueMultiple: [  rFa?'1':'', rFB?'2':'', rGB?'3':''
         ]
       });
     }else{
       this.setState({
         valueMultiple: [
-          this.props.item.favorite?'1':'',
-          this.props.item.fBoard?'2':'',
-          this.props.item.gBoard?'3':''
+          this.props.item.favorite?'1':'',this.props.item.fBoard?'2':'', this.props.item.gBoard?'3':''
         ]
       });
     }
@@ -61,13 +56,26 @@ class WordBox extends Component {
         valueMultiple: value,
       });
     };
+
+checkedNow =()=>{
+  var {dispatch}=this.props;
+  var checker = moment().diff(this.props.item.lastCheckedAt,"days");
+  if(checker>0){
+    dispatch(startWordBoxUpdate(this.props.item.id,{lastCheckedAt:moment().valueOf()}));
+  }
+}
+
   render() {
     var {dispatch}=this.props;
+    //moment(tm).format("MMM Do YYYY")   format readable
+    //var lastCheckSTR =moment(this.props.item.createdAt).from(moment());
+    var lastCheck =moment().diff(this.props.item.lastCheckedAt,"days");
 
     return (
       <div  className="h">
         <Card style={{width:145, margin:5}}>
 
+          <Link style={{textDecoration:'none'}} to={"/WordBoxes/"+this.props.item.id} onClick={ this.checkedNow}>
           {this.props.pic ?
             <CardMedia style={{borderRadius:5}}>
               <img alt="i-te" style={{maxWidth:130,borderRadius:5}}
@@ -78,24 +86,24 @@ class WordBox extends Component {
 
             <CardTitle style={{padding:5}} title={
               <span>
-              <i style={{margin:5}} className="fa fa-star material-icons md-18 md-dark" aria-hidden="true"></i>
+                {this.props.item.favorite?
+                  <i style={{margin:5}} className=" material-icons md-18 md-dark md-active" aria-hidden="true">favorite</i>:<div/> }
+
               {this.props.item.boxName}
               </span>
             } />
+          </Link>
             <CardActions style={{textAlign:'right'}}>
               {/*}<Badge style={{padding:11,margin:0,left:18,position:'absolute'}} badgeContent={4} primary={true}  />*/}
               <IconButton  style={{left:14,position:'absolute',width:30,height:30,marginRight:0,padding:0,border:0}}><i
-                 className="material-icons md-22 md-dark md-active" aria-hidden="true">assignment</i>
+                onClick={ this.checkedNow}
+                 className={
+                   lastCheck<=7?"material-icons md-22 md-dark md-active":
+                    lastCheck<=30?"material-icons md-22 md-dark md-active2":
+                   "material-icons md-22 md-dark"
+                 } aria-hidden="true">assignment</i>
                </IconButton>
-               {/*}<IconButton  style={{width:30,height:30,marginRight:0,padding:0,border:0}}><i
-                  className="material-icons md-24 md-dark md-active" aria-hidden="true">assignment</i>
-                </IconButton>
-                {/*}<IconButton  style={{width:30,height:30,marginRight:0,padding:0,border:0}}><i
-                   className="material-icons md-24 md-dark" aria-hidden="true">supervisor_account</i>
-                 </IconButton>
-                <IconButton  style={{width:30,height:30,marginRight:0,padding:0,border:0}}><i
-                   className="material-icons md-24 md-dark" aria-hidden="true">language</i>
-                 </IconButton>*/}
+
                  <IconMenu
                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
@@ -112,17 +120,23 @@ class WordBox extends Component {
                      <IconButton  style={{marginRight:0,padding:0,border:0}}>
                        <i style={{margin:'5px'}} className="material-icons md-dark md-24">favorite</i>
                      </IconButton>
-                   } value="1" primaryText="Favorite" />
+                   } onClick ={()=>{
+                   dispatch(startWordBoxUpdate(this.props.item.id,{favorite:!this.props.item.favorite}));}}
+                   value="1" primaryText="Favorite" />
                    <MenuItem leftIcon={
                      <IconButton  style={{marginRight:0,padding:0,border:0}}>
                        <i style={{margin:'5px'}} className="material-icons md-dark md-24">supervisor_account</i>
                      </IconButton>
-                   } value="2" primaryText="Friend Post" />
+                   } onClick ={()=>{
+                   dispatch(startWordBoxUpdate(this.props.item.id,{fBoard:!this.props.item.fBoard}));}}
+                   value="2" primaryText="Friend Post" />
                    <MenuItem leftIcon={
                      <IconButton  style={{marginRight:0,padding:0,border:0}}>
                        <i style={{margin:'5px'}} className="material-icons md-dark md-24">language</i>
                      </IconButton>
-                   } value="3" primaryText="Global Post" />
+                   } onClick ={()=>{
+                   dispatch(startWordBoxUpdate(this.props.item.id,{gBoard:!this.props.item.gBoard}));}}
+                   value="3" primaryText="Global Post" />
                    <Divider/>
                    <MenuItem leftIcon={
                      <IconButton  style={{marginRight:0,padding:0,border:0}}>

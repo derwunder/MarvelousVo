@@ -31,6 +31,8 @@ var requireLogout = (nextState,replace,next)=>{
    next();
 };
 
+
+
 class Routes extends Component {
 
   render() {
@@ -43,7 +45,7 @@ class Routes extends Component {
         </Route>
         <Route path="/WordBoxes" component={UserPage} >
           <IndexRoute component={WordBoxes}/>
-          <Route path="/WordBoxes/:wordListN" component={WordList}/>
+          <Route path="/WordBoxes/:wordListN" component={WordList} />
           <Route path="/MyLearning" component={MyLearning}/>
           <Route path="/FriendBoard" component={FriendBoard}/>
           <Route path="/FriendList" component={FriendList}/>

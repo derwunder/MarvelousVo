@@ -16,7 +16,7 @@ import ActionLang from 'material-ui/svg-icons/action/language';
 import Notifications from 'material-ui/svg-icons/social/notifications';
 import {white} from 'material-ui/styles/colors';
 
-import {drawerOpen} from '../../actions/Actions';
+import {drawerOpen,logoutFB} from '../../actions/Actions';
 
 class DrawerCO extends Component {
 
@@ -55,6 +55,11 @@ class DrawerCO extends Component {
             <Subheader>World</Subheader>
             <Link style={{textDecoration:'none'}} to="/GlobalBoard" onClick={()=>dispatch(drawerOpen())}>
               <ListItem primaryText="Global Board" leftIcon={<ActionLang/>} />
+            </Link>
+            <Divider/>
+            <Subheader>Session</Subheader>
+            <Link style={{textDecoration:'none'}} to="/" onClick={()=>dispatch(logoutFB())}>
+              <ListItem primaryText="Logout" leftIcon={<ActionLang/>} />
             </Link>
           </List>
         </Drawer>

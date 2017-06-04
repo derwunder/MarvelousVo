@@ -19,6 +19,69 @@ export var authReducer = (state = {}, action) => {
 
 export var wordBoxesReducer = (state = [], action) => {
   switch (action.type) {
+    case 'WI_DELETE':
+      return state.map((wordBox) => {
+        if(wordBox.id===action.idWB){
+          const indexOfToDelete = (wordBox.words).findIndex(word => {
+              return word.id === action.idWI
+            });
+          return {
+            ...wordBox,
+             words:[
+               ...(wordBox.words).slice(0, indexOfToDelete),
+               ...(wordBox.words).slice(indexOfToDelete + 1)
+             ]
+          };
+        } else {
+          return wordBox;
+        }
+      });
+    case 'WI_UPDATE':
+      return state.map((wordBox) => {
+        if(wordBox.id===action.idWB){
+          return {
+            ...wordBox,
+             words:[
+               ...(wordBox.words).map((wordItem)=>{
+                 if(wordItem.id===action.idWI){
+                   return {
+                     ...wordItem,
+                     ...action.wordItem
+                   }
+                 }
+                 else {
+                   return wordItem;
+                 }
+               })
+             ]
+          };
+        } else {
+          return wordBox;
+        }
+      });
+    case 'WI_ADD':
+      return state.map((wordBox) => {
+        if (wordBox.id === action.wordBoxId) {
+          if(wordBox.hasOwnProperty('words')){
+            return {
+              ...wordBox,
+              words:[
+                ...wordBox.words,
+                action.wordItem
+              ]
+            };
+          }else{
+            return {
+              ...wordBox,
+              words:[
+                action.wordItem
+              ]
+            };
+          }
+        } else {
+          return wordBox;
+        }
+      });
     case 'SET_WORDBOXES':
       return[
           ...action.wordBoxes
