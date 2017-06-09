@@ -27,6 +27,18 @@ class WordBox extends Component {
     this.handleEraser=this.handleEraser.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.item.favorite !== this.props.item.favorite ||
+      nextProps.item.fBoard !== this.props.item.fBoard ||
+      nextProps.item.gBoard !== this.props.item.gBoard
+    ) {
+      this.setState({valueMultiple:  [
+        nextProps.item.favorite?'1':'', nextProps.item.fBoard?'2':'', nextProps.item.gBoard?'3':''
+      ]});
+    }
+
+  }
+
   handleEraser (){
     this.setState({
       valueMultiple: [
@@ -36,18 +48,18 @@ class WordBox extends Component {
     this.setState({wordBoxEraser: !this.state.wordBoxEraser});
   }
   handleEditor (rFa,rFB,rGB) {
-    if(rFB!==undefined){
+  /*  if(rFB!==undefined){
       this.setState({
         valueMultiple: [  rFa?'1':'', rFB?'2':'', rGB?'3':''
         ]
       });
-    }else{
+    }else{*/
       this.setState({
         valueMultiple: [
           this.props.item.favorite?'1':'',this.props.item.fBoard?'2':'', this.props.item.gBoard?'3':''
         ]
       });
-    }
+  //  }
     this.setState({wordBoxEditor: !this.state.wordBoxEditor});
   }
 

@@ -14,7 +14,8 @@ class WordItemAdd extends Component {
       translations:[{lan:'',tr:''}],
       tags:[{tag:''}],
       wordTerm:'',
-      bookmark:false
+      bookmark:false,
+      tagText:''
     };
     this.handleChangeFav=this.handleChangeFav.bind(this);
     this.handleSave=this.handleSave.bind(this);
@@ -25,6 +26,7 @@ class WordItemAdd extends Component {
       this.setState({definitions:[{tp:'',def:''}]});
       this.setState({translations:[{lan:'',tr:''}]});
       this.setState({tags:[{tag:''}]})
+      this.setState({tagText:''});
   };
   handleOpen = () => {
     this.restoreState();
@@ -76,7 +78,7 @@ class WordItemAdd extends Component {
     </FloatingActionButton>
 
     <Dialog contentStyle={{width:'95%',maxWidth:550}}
-          title="Add Word"
+          title="Add Word Term"
           actions={actions}
           modal={true}
           open={this.state.open}

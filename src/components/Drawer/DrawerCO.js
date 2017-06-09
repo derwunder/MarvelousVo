@@ -37,9 +37,11 @@ class DrawerCO extends Component {
           <List>
             <Subheader>Start</Subheader>
             <Link style={{textDecoration:'none'}} to="/WordBoxes" onClick={()=>dispatch(drawerOpen())}>
-              <ListItem primaryText="Word Boxes" leftIcon={<ImageViewComfy/>} />
+              <ListItem primaryText="Word Boxes" leftIcon={<ActionViewModule/>} />
             </Link>
-            <ListItem primaryText="My Idioms" leftIcon={<ActionViewModule/>} />
+            <Link style={{textDecoration:'none'}} to="/AllWords" onClick={()=>dispatch(drawerOpen())}>
+              <ListItem primaryText="All Words" leftIcon={<ActionViewList/>} />
+            </Link>
             <Link style={{textDecoration:'none'}} to="/MyLearning" onClick={()=>dispatch(drawerOpen())}>
               <ListItem primaryText="My Learning" leftIcon={<ActionAssignment/>} />
             </Link>

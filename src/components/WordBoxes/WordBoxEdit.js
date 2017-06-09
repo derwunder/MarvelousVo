@@ -18,6 +18,21 @@ class WordBoxEdit extends Component {
     this.handleChangeFav=this.handleChangeFav.bind(this);
     this.handleSave=this.handleSave.bind(this);
   }
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.item.boxName !== this.props.item.boxName   ) {
+      this.setState({boxName: nextProps.item.boxName });
+    }
+    if(nextProps.item.favorite !== this.props.item.favorite   ) {
+      this.setState({favorite: nextProps.item.favorite });
+    }
+    if(nextProps.item.fBoard !== this.props.item.fBoard   ) {
+      this.setState({fBoard: nextProps.item.fBoard });
+    }
+    if(nextProps.item.gBoard !== this.props.item.gBoard   ) {
+      this.setState({gBoard: nextProps.item.gBoard });
+    }
+
+  }
 
     handleChangeFav  () {
       this.setState({favorite: !this.state.favorite});

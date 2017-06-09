@@ -7,6 +7,7 @@ import Home from './views/Home';
 import WordBoxes from './views/WordBoxes';
 import UserPage from './views/UserPage';
 import WordList from './views/WordList';
+import WordListAll from './views/WordListAll';
 import MyLearning from './views/MyLearning';
 import FriendList from './views/FriendList';
 import FriendBoard from './views/FriendBoard';
@@ -46,6 +47,7 @@ class Routes extends Component {
         <Route path="/WordBoxes" component={UserPage} >
           <IndexRoute component={WordBoxes}/>
           <Route path="/WordBoxes/:wordListN" component={WordList} />
+          <Route path="/AllWords" component={WordListAll}/>
           <Route path="/MyLearning" component={MyLearning}/>
           <Route path="/FriendBoard" component={FriendBoard}/>
           <Route path="/FriendList" component={FriendList}/>

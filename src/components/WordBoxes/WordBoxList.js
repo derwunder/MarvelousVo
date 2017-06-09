@@ -12,6 +12,8 @@ import {Subheader} from 'material-ui';
 import StackGrid, { transitions } from "react-stack-grid";
 const { scaleDown } = transitions;
 
+import wordBoxAPI from '../../api/wordBoxAPI';
+
 
 
 class WordBoxList extends Component {
@@ -41,16 +43,33 @@ class WordBoxList extends Component {
 
 var {wordBoxesReducer, authReducer}=this.props;
 
-    var wordBoxesLoad = (itemRender) =>{
+    var wordBoxesLoad = () =>{
       //console.log("you are here"+JSON.stringify(itemRender));
-
-      return (
-        itemRender.map((item,index)=>{
+      if(this.props.type===1){
+        return (
+        wordBoxAPI.filterWordBoxes(wordBoxesReducer,0).map((item,index)=>{
           if(item.hasOwnProperty('id'))
           return <div key={"key"+index}>
             <WordBox pic={value2} item={item}/></div>
         })
-      );
+        );
+      }else if(this.props.type===2){
+        return (
+        wordBoxAPI.filterWordBoxes(wordBoxesReducer,1).map((item,index)=>{
+          if(item.hasOwnProperty('id'))
+          return <div key={"key"+index}>
+            <WordBox pic={value2} item={item}/></div>
+        })
+        );
+      }else if(this.props.type===3){
+        return (
+        wordBoxAPI.filterWordBoxes(wordBoxesReducer,2).map((item,index)=>{
+          if(item.hasOwnProperty('id'))
+          return <div key={"key"+index}>
+            <WordBox pic={value2} item={item}/></div>
+        })
+        );
+      }else{ return <div/>;}
     };
 
     var value =true;var value2 =false;
@@ -66,7 +85,7 @@ var {wordBoxesReducer, authReducer}=this.props;
      leaved={scaleDown.leaved}
     >
 
-      {wordBoxesLoad(wordBoxesReducer)}{/*style={{display:'inline-block',verticalAlign:'top'}}*/}
+      {wordBoxesLoad()}{/*style={{display:'inline-block',verticalAlign:'top'}}*/}
 
     </StackGrid></div>
     );

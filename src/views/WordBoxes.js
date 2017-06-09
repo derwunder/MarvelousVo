@@ -8,7 +8,7 @@ class WordBoxes extends Component {
   render() {
 
     return (<div>
-      <WordBoxList/>
+      <WordBoxList type={1}/>
       <WordBoxAdd/>
     </div>
     );

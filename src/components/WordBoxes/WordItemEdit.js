@@ -14,7 +14,8 @@ class WordItemEdit extends Component {
       translations:this.props.item.translations,
       tags:this.props.item.tags,
       wordTerm:this.props.item.wordTerm,
-      bookmark:this.props.item.bookmark
+      bookmark:this.props.item.bookmark,
+      tagText:''
     };
     this.handleChangeFav=this.handleChangeFav.bind(this);
     this.handleSave=this.handleSave.bind(this);
@@ -32,7 +33,8 @@ class WordItemEdit extends Component {
       this.setState({bookmark: this.props.item.bookmark});
       this.setState({definitions:this.props.item.definitions});
       this.setState({translations:this.props.item.translations});
-      this.setState({tags:this.props.item.tags})
+      this.setState({tags:this.props.item.tags});
+      this.setState({tagText:''});
   };
   handleOpen = () => {
     this.restoreState();

@@ -22,7 +22,7 @@ class WordItem extends Component {
       this.handleEditor=this.handleEditor.bind(this);
       this.handleBookMark=this.handleBookMark.bind(this);
       this.handleEraser= this.handleEraser.bind(this);
-      console.log("word term: "+JSON.stringify(this.props.item));
+      //console.log("word term: "+JSON.stringify(this.props.item));
   }
   handleBookMark (){
     var {dispatch}=this.props;
@@ -47,7 +47,7 @@ class WordItem extends Component {
       var tagChecker = this.props.item.tags;
     return (
       <div>
-          <ListItem hoverColor={'#fff'} style={{cursor:'default'}}
+          <ListItem hoverColor={'#rgba(255, 255, 255, 0.1)'} style={{cursor:'default'}}
             rightIcon={<div>
               <IconButton onTouchTap={this.handleBookMark}  style={{width:30,height:30,marginRight:0,padding:0,border:0}}>
                 <i style={{margin:'5px'}} className={this.props.item.bookmark?"material-icons md-dark md-active":"material-icons md-dark"}>bookmark</i>

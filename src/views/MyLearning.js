@@ -20,22 +20,22 @@ class MyLearning extends Component {
           <Chip labelColor={'#fff'}
             backgroundColor={teal300}>
             <Avatar size={32} color={teal300} backgroundColor={teal700}>
-              <i style={{margin:'2px'}} className="fa fa-graduation-cap material-icons md-light md-18"></i>
+              <i style={{margin:'2px'}} className="fa fa-hourglass-start material-icons md-light md-18"></i>
                     </Avatar>
-                    Words
+                   Seen recently
                   </Chip>
         </Subheader>
-        <WordBoxList/>
+        <WordBoxList type={2}/>
         <Subheader style={{marginTop:8}}>
           <Chip labelColor={'#fff'}
             backgroundColor={teal300}>
             <Avatar size={32} color={teal300} backgroundColor={teal700}>
-              <i style={{margin:'2px'}} className="fa fa-users material-icons md-light md-18"></i>
+              <i style={{margin:'2px'}} className="fa fa-hourglass-end material-icons md-light md-18"></i>
                     </Avatar>
-                    Idioms
+                   Seen more than a week ago
                   </Chip>
         </Subheader>
-        <WordBoxList/>
+        <WordBoxList type={3}/>
 
       </div>
     );

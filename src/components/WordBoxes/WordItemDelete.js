@@ -17,7 +17,7 @@ class WordItemDelete extends Component {
 
     handleDelete  () {
       var {dispatch} = this.props;
-    
+
     dispatch(startWordItemDelete(this.props.wordBoxId,this.props.item.id));
     //this.props.handleEditor(this.state.favorite,this.state.fBoard,this.state.gBoard);
     //this.props.updateState(this.state.favorite,this.state.fBoard,this.state.gBoard);
@@ -44,7 +44,7 @@ class WordItemDelete extends Component {
       <div>
 
     <Dialog contentStyle={{width:'95%',maxWidth:350}}
-          title="Delete Word Box"
+          title="Delete Word Term"
           actions={actions}
           modal={true}
           open={this.props.eraser}
