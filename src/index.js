@@ -18,7 +18,16 @@ injectTapEventPlugin();
 
 import Router from './Router';
 
-var store = configureStore({regularReducer:{wordBoxEditorOpen:false}});
+var initialState ={
+  regularReducer:{
+    wbFavorite:false,
+    wbGBoard:false,
+    wbFBoard:false,
+    wbSortBy:'aZ',
+    wbSearch:''
+  }
+};
+var store = configureStore(initialState);
 
 
 const muiTheme = getMuiTheme({

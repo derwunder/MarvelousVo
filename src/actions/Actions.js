@@ -1,6 +1,34 @@
 import {auth, github,google} from '../firebase/constants';
 //import firebase here to handle async task
 
+export var filterWordBoxesSearch = (wbSearch)=>{
+  return {
+    type:'FILTER_WORDBOXES_SEARCH',
+    wbSearch
+  }
+};
+export var filterWordBoxesFBoard = ()=>{
+  return {
+    type:'FILTER_WORDBOXES_FBOARD'
+  }
+};
+export var filterWordBoxesGBoard = ()=>{
+  return {
+    type:'FILTER_WORDBOXES_GBOARD'
+  }
+};
+export var filterWordBoxesFavorite = ()=>{
+  return {
+    type:'FILTER_WORDBOXES_FAVORITE'
+  }
+};
+export var sortWordBoxesBy = (wbSortBy)=>{
+  return {
+    type:'SORT_WORDBOXES_BY',
+    wbSortBy
+  }
+};
+
 export var drawerOpen = ()=>{
   return {
     type:'DRAWER_OPEN'

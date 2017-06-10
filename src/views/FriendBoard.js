@@ -10,7 +10,7 @@ const { scaleDown } = transitions;
 import {Tabs, Tab} from 'material-ui/Tabs';
 // From https://github.com/oliviertassinari/react-swipeable-views
 import SwipeableViews from 'react-swipeable-views';
-
+import Head from '../components/HeadRoom/Head';
 
 const styles = {
   headline: {
@@ -40,6 +40,7 @@ class FriendBoard extends Component {
   render() {
     return (
       <div>
+        <Head title={"Friend Board"}/>
         <Tabs
           onChange={this.handleChange}
           value={this.state.slideIndex}

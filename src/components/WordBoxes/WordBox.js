@@ -105,6 +105,10 @@ checkedNow =()=>{
               </span>
             } />
           </Link>
+
+          <p>CR: {moment(this.props.item.createdAt).format("MMM Do YYYY")} </p>
+          <p>LC: {moment(this.props.item.lastCheckedAt).format("MMM Do YYYY")} </p>
+
             <CardActions style={{textAlign:'right'}}>
               {/*}<Badge style={{padding:11,margin:0,left:18,position:'absolute'}} badgeContent={4} primary={true}  />*/}
               <IconButton  style={{left:14,position:'absolute',width:30,height:30,marginRight:0,padding:0,border:0}}><i

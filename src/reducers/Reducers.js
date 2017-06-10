@@ -124,6 +124,31 @@ export var wordBoxesReducer = (state = [], action) => {
 
 export var regularReducer = (state ={}, action) =>{
   switch (action.type) {
+    case 'SORT_WORDBOXES_BY':
+      return{
+        ...state,
+        wbSortBy:action.wbSortBy
+      };
+    case 'FILTER_WORDBOXES_SEARCH':
+      return{
+        ...state,
+        wbSearch:action.wbSearch
+      }
+    case 'FILTER_WORDBOXES_FBOARD':
+     return{
+       ...state,
+       wbFBoard:!state.wbFBoard
+     };
+    case 'FILTER_WORDBOXES_GBOARD':
+     return{
+       ...state,
+       wbGBoard:!state.wbGBoard
+     };
+    case 'FILTER_WORDBOXES_FAVORITE':
+      return {
+        ...state,
+        wbFavorite:!state.wbFavorite
+      };
     case 'DRAWER_OPEN':
       return {
         ...state,

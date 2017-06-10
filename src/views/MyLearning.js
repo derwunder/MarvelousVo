@@ -7,6 +7,8 @@ import WordBoxList from '../components/WordBoxes/WordBoxList';
 import {Subheader,Divider, Chip,Avatar} from 'material-ui';
 import {teal300, teal700} from 'material-ui/styles/colors';
 
+import Head from '../components/HeadRoom/Head';
+
 class MyLearning extends Component {
   constructor(props) {
    super(props);
@@ -16,6 +18,7 @@ class MyLearning extends Component {
   render() {
     return (
       <div>
+        <Head title={"My Learning"}/>
         <Subheader style={{marginTop:8}}>
           <Chip labelColor={'#fff'}
             backgroundColor={teal300}>

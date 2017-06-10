@@ -42,12 +42,14 @@ class WordBoxList extends Component {
     };*/
 
 var {wordBoxesReducer, authReducer}=this.props;
+var {wbFavorite,wbFBoard,wbGBoard,wbSearch,wbSortBy} =this.props.regularReducer;
+//console.log(wbFavorite);
 
     var wordBoxesLoad = () =>{
       //console.log("you are here"+JSON.stringify(itemRender));
       if(this.props.type===1){
         return (
-        wordBoxAPI.filterWordBoxes(wordBoxesReducer,0).map((item,index)=>{
+        wordBoxAPI.filterWordBoxes(wordBoxesReducer,0,wbFavorite,wbFBoard,wbGBoard,wbSearch,wbSortBy).map((item,index)=>{
           if(item.hasOwnProperty('id'))
           return <div key={"key"+index}>
             <WordBox pic={value2} item={item}/></div>
@@ -55,7 +57,7 @@ var {wordBoxesReducer, authReducer}=this.props;
         );
       }else if(this.props.type===2){
         return (
-        wordBoxAPI.filterWordBoxes(wordBoxesReducer,1).map((item,index)=>{
+        wordBoxAPI.filterWordBoxes(wordBoxesReducer,1,wbFavorite,wbFBoard,wbGBoard,wbSearch,wbSortBy).map((item,index)=>{
           if(item.hasOwnProperty('id'))
           return <div key={"key"+index}>
             <WordBox pic={value2} item={item}/></div>
@@ -63,7 +65,7 @@ var {wordBoxesReducer, authReducer}=this.props;
         );
       }else if(this.props.type===3){
         return (
-        wordBoxAPI.filterWordBoxes(wordBoxesReducer,2).map((item,index)=>{
+        wordBoxAPI.filterWordBoxes(wordBoxesReducer,2,wbFavorite,wbFBoard,wbGBoard,wbSearch,wbSortBy).map((item,index)=>{
           if(item.hasOwnProperty('id'))
           return <div key={"key"+index}>
             <WordBox pic={value2} item={item}/></div>
