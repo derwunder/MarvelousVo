@@ -18,7 +18,7 @@ class MyLearning extends Component {
   render() {
     return (
       <div>
-        <Head title={"My Learning"}/>
+        <Head title={"My Learning"} section={1}/>
         <Subheader style={{marginTop:8}}>
           <Chip labelColor={'#fff'}
             backgroundColor={teal300}>

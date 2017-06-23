@@ -2,6 +2,226 @@ import {ref} from '../firebase/constants';
 import moment from 'moment';
 import {browserHistory} from 'react-router';
 
+/*********GLOBAL WORD BOX REPLY*****************/
+export var delReplyGlobalWordBox =(idWBG,idCm,idRe)=>{
+  return{
+    type:'DELETE_REPLY_GLOBAL_WORDBOX',
+    idWBG,idCm,idRe
+  };
+};
+export var deleteReplyGWB = (idWBG,idCm,idRe)=>{
+  return (dispatch,getState)=>{
+    var replyWBGItemRef = ref.child(`global/wordboxes/${idWBG}/comments/${idCm}/replys/${idRe}`);
+    return replyWBGItemRef.remove().then(()=>{
+      dispatch(delReplyGlobalWordBox(idWBG,idCm,idRe));
+      console.log("Delete Reply Check FB");  //location.reload();  //dispatch(updateTodo(id,updates));
+    });
+
+  };
+};
+export var loReplyGlobalWordBox =(idWBG,idCm,newReply)=>{
+  return{
+    type:'ADD_REPLY_GLOBAL_WORDBOX',
+    idWBG,
+    idCm,
+    newReply
+  };
+};
+export var replyGlobalWordBox = (idWBG,idCm,newReply) =>{
+  return (dispatch,getState)=>{
+    var gWordBoxReplyRef = ref.child(`global/wordboxes/${idWBG}/comments/${idCm}/replys/`).push(newReply);
+
+    return gWordBoxReplyRef.then(()=>{
+      console.log("Check Reply on FB");
+      dispatch(loReplyGlobalWordBox(idWBG,idCm,{
+        id:gWordBoxReplyRef.key,
+        ...newReply
+      }));
+    });
+  };
+};
+/******** GLOBAL WORD BOX COMMENT ******/
+export var delCommentGlobalWordBox =(idWBG,idCm)=>{
+  return{
+    type:'DELETE_COMMENT_GLOBAL_WORDBOX',
+    idWBG,
+    idCm,
+  };
+};
+export var deleteCommentGWB = (idWBG,idCm)=>{
+  return (dispatch,getState)=>{
+    var commentWBGItemRef = ref.child(`global/wordboxes/${idWBG}/comments/${idCm}`);
+    return commentWBGItemRef.remove().then(()=>{
+      dispatch(delCommentGlobalWordBox(idWBG,idCm));
+      console.log("Delete Comment Check FB");  //location.reload();  //dispatch(updateTodo(id,updates));
+    });
+
+  };
+};
+export var loCommentGlobalWordBox =(idWBG,newComment)=>{
+  return{
+    type:'ADD_COMMENT_GLOBAL_WORDBOX',
+    idWBG,
+    newComment
+  };
+};
+export var commentGlobalWordBox = (idWBG,newComment) =>{
+  return (dispatch,getState)=>{
+    var gWordBoxCommentRef = ref.child(`global/wordboxes/${idWBG}/comments/`).push(newComment);
+
+    return gWordBoxCommentRef.then(()=>{
+      console.log("Check Comment on FB id ");
+
+      dispatch(loCommentGlobalWordBox(idWBG,{
+        id:gWordBoxCommentRef.key,
+        ...newComment
+      }));
+
+    });
+  };
+};
+
+/******** GLOBAL WORD BOX LIKE ******/
+export var likeWordBox = (idWBG,uid,item)=>{
+  return{
+    type:'LIKE_GLOBAL_WORDBOX',
+    idWBG,
+    uid, item
+  };
+};
+export var dislikeWordBox = (idWBG,uid,item)=>{
+  return{
+    type:'DISLIKE_GLOBAL_WORDBOX',
+    idWBG,
+    uid, item
+  };
+};
+export var deletelikeWordBox = (idWBG,uid)=>{
+  return{
+    type:'DELETE_LIKE_GLOBAL_WORDBOX',
+    idWBG,
+    uid
+  };
+};
+export var startLikeWordBox =(idWBG,type)=>{
+  return (dispatch,getState)=>{
+
+    var uid= getState().authReducer.uid;
+    var likeStatus=false, dislikeStatus=false;
+
+    var gWB={};
+    var gWB =getState().gWordBoxesReducer.find(wb=>wb.id===idWBG);
+
+    if(gWB.hasOwnProperty('like')){
+      if((gWB.like).hasOwnProperty(uid)) likeStatus=true;
+    }
+    if(gWB.hasOwnProperty('dislike')){
+      if((gWB.dislike).hasOwnProperty(uid)) dislikeStatus=true;
+    }
+
+    var gWordBoxLikeRef = ref.child(`global/wordboxes/${idWBG}`);
+
+    if(type==='like'){
+      var mergedUpdate = {};
+      mergedUpdate["like/"+uid] = likeStatus? null: true;
+      mergedUpdate["dislike/"+uid] = null;
+      var itemLocal= {}; itemLocal[uid]=true;
+
+    return  gWordBoxLikeRef.update(mergedUpdate).then(()=>{
+      console.log("Global WB Like");
+      likeStatus?
+        dispatch(deletelikeWordBox(idWBG,uid)):
+        dispatch(likeWordBox(idWBG,uid,itemLocal))
+    });
+
+    }else if(type==='dislike'){
+      var mergedUpdate = {};
+      mergedUpdate["like/"+uid] = null;
+      mergedUpdate["dislike/"+uid] = dislikeStatus? null: true;
+      var itemLocal= {}; itemLocal[uid]=true;
+
+      return gWordBoxLikeRef.update(mergedUpdate).then(()=>{
+        console.log("Global WB disLike");
+        dislikeStatus?
+          dispatch(deletelikeWordBox(idWBG,uid)):
+          dispatch(dislikeWordBox(idWBG,uid,itemLocal))
+      });
+
+    }
+
+  //  var gWordBoxLikeRef = ref.child(`global/wordboxes/${idWBG}/like/${uid}`).set(true);
+
+    return gWordBoxLikeRef
+
+
+  };
+};
+
+/******** GLOBAL DL WORD BOXES ******/
+export var setGlobalWordBoxes = (gWordBoxes)=>{
+  return{
+    type:'SET_GLOBAL_WORDBOXES',
+    gWordBoxes
+  };
+};
+export var startDLGWordBoxes = () =>{
+  return (dispatch,getState)=>{
+    var gWordBoxesRef = ref.child(`global/wordboxes`);
+
+    return gWordBoxesRef.once('value').then((snapshot)=>{
+      var gWordBoxes = snapshot.val() || {};
+
+      var parsedGWordBoxes = []; //redux expect to be an Array Object
+      //we conver it
+      Object.keys(gWordBoxes).forEach((gWordBoxId)=>{
+        if((gWordBoxes[gWordBoxId]).hasOwnProperty('wordbox')){
+        if((gWordBoxes[gWordBoxId]).hasOwnProperty('comments')){
+        var parsedComments = [];
+          Object.keys(gWordBoxes[gWordBoxId]['comments']).forEach(commentId=>{
+            if((gWordBoxes[gWordBoxId]['comments'][commentId]).hasOwnProperty('replys')){
+            var parsedReplys = [];
+              Object.keys(gWordBoxes[gWordBoxId]['comments'][commentId]['replys']).forEach(replyId=>{
+                parsedReplys.push({
+                  id:replyId,
+                  ...gWordBoxes[gWordBoxId]['comments'][commentId]['replys'][replyId]
+                });
+              });
+              parsedComments.push({
+                id:commentId,
+                ...gWordBoxes[gWordBoxId]['comments'][commentId],
+                replys:parsedReplys
+              });
+            }
+            else{
+              parsedComments.push({
+                id:commentId,
+                ...gWordBoxes[gWordBoxId]['comments'][commentId]
+              });
+            }
+          });
+
+          parsedGWordBoxes.push({
+              id: gWordBoxId,
+              ...gWordBoxes[gWordBoxId],
+              comments:parsedComments
+          });
+
+        }
+        else{
+          parsedGWordBoxes.push({
+              id: gWordBoxId,
+              ...gWordBoxes[gWordBoxId]
+          });
+        }
+
+      }
+      });
+        dispatch(setGlobalWordBoxes(parsedGWordBoxes));
+    });
+  };
+};
+
+
 
 /*****DELETE WORD ITEM******/
 export var wordItemDelete = (idWB,idWI)=>{
@@ -15,6 +235,7 @@ export var startWordItemDelete = (idWB,idWI)=>{
     var wordItemRef = ref.child(`users/${getState().authReducer.uid}/wordboxes/${idWB}/words/${idWI}`);
     return wordItemRef.remove().then(()=>{
       dispatch(wordItemDelete(idWB,idWI));
+      dispatch(globalWordBoxWords(idWB));
       console.log("Delete word successed");  //location.reload();  //dispatch(updateTodo(id,updates));
     });
 
@@ -28,7 +249,47 @@ export var wordItemUpdate =(idWB,idWI,wordItem)=>{
     wordItem
   }
 };
+var globalWordBoxWords = (id) =>{
+  return (dispatch, getState)=>{
 
+      var wordBox =(getState().wordBoxesReducer).find(itm=>itm.id===id);
+      var words =[];
+
+  /*    var wordBoxChecked={
+        boxName:wordBox.boxName,
+        createdAt:wordBox.createdAt,
+        updatedAt:moment().valueOf(),
+        createBy:getState().authReducer.uid,
+        creatorName:getState().authReducer.displayName,
+        words:wordBox.hasOwnProperty('words')? wordBox.words :false
+      };
+      var gWordBoxRef = ref.child(`global/wordboxes/${id}/wordbox`).set(wordBoxChecked);*/
+
+
+      if(wordBox.hasOwnProperty('words'))
+        words =wordBox.words;
+
+      if(wordBox.hasOwnProperty('gBoard')){
+        if(wordBox.gBoard){
+          var timeUp=moment().valueOf();
+          if(words.length>0){
+
+            var gWordBoxWordsRef = ref.child(`global/wordboxes/${id}/wordbox`)
+              .update({words:words,updatedAt:timeUp,createBy:getState().authReducer.uid});
+            //ref.child(`global/wordboxes/${id}/wordbox/words`).set(words);
+          }
+          else {
+            var gWordBoxWordsRef = ref.child(`global/wordboxes/${id}/wordbox`)
+              .update({words:false,updatedAt:timeUp,createBy:getState().authReducer.uid});
+            //ref.child(`global/wordboxes/${id}/wordbox/words`).set(false);
+          }
+          return gWordBoxWordsRef.then(()=>{
+            console.log("Global WB W");
+          });
+        }
+      }
+  };
+};
 export var startWordItemUpdate = (idWB,idWI, itemUpdates)=>{
   return (dispatch, getState)=>{
     var wordItemRef = ref.child(`users/${getState().authReducer.uid}/wordboxes/${idWB}/words/${idWI}`);
@@ -36,6 +297,7 @@ export var startWordItemUpdate = (idWB,idWI, itemUpdates)=>{
     return wordItemRef.update(itemUpdates).then(()=>{
     //  var wordItem= {idWI,...itemUpdates};
       dispatch(wordItemUpdate(idWB,idWI,itemUpdates));
+      dispatch(globalWordBoxWords(idWB));
       console.log("Edition WI: "+JSON.stringify({idWI,...itemUpdates})); //location.reload();  //dispatch(updateTodo(id,updates));
     });
   };
@@ -66,12 +328,12 @@ export var createWordItem = (newItem,wordBoxId)=>{
         id:wordItemRef.key,
         ...newItem
       },wordBoxId));
+      dispatch(globalWordBoxWords(wordBoxId));
       console.log("Check FB");
     });
 
   };
 };
-
 
 /*****CHECKER WORD BOX *****/
 export var checkIfWordBoxExist = (id)=>{
@@ -90,8 +352,6 @@ export var checkIfWordBoxExist = (id)=>{
   };
 };
 
-
-
 /*****DELETE WORD BOX******/
 export var wordBoxDelete = (id)=>{
   return {
@@ -101,11 +361,19 @@ export var wordBoxDelete = (id)=>{
 };
 export var startWordBoxDelete = (id)=>{
   return (dispatch, getState)=>{
-    var wordBoxRef = ref.child(`users/${getState().authReducer.uid}/wordboxes/${id}`);
-    return wordBoxRef.remove().then(()=>{
+    var wbDeleteRef = ref.child(`users/${getState().authReducer.uid}/wordboxes/${id}`);
+
+    return wbDeleteRef.remove().then(()=>{
       dispatch(wordBoxDelete(id));
+      var wbGdel = ref.child(`global/wordboxes/${id}`);
+      wbGdel.remove().then(()=>{
+        console.log("Delete successed Global");
+      });
+    //  dispatch(globalWordBoxPost(id,false));
       console.log("Delete successed");  //location.reload();  //dispatch(updateTodo(id,updates));
     });
+
+
 
   };
 };
@@ -117,14 +385,42 @@ export var wordBoxUpdate =(id,wordBox)=>{
     wordBox
   }
 };
+var globalWordBoxPost = (id,gBoard) =>{
+  return (dispatch, getState)=>{
 
+      if(gBoard){
+        var wordBox =(getState().wordBoxesReducer).find(itm=>itm.id===id);
+        var wordBoxChecked={
+          boxName:wordBox.boxName,
+          createdAt:wordBox.createdAt,
+          updatedAt:moment().valueOf(),
+          createBy:getState().authReducer.uid,
+          creatorName:getState().authReducer.displayName,
+          creatorAvatar:getState().authReducer.photoURL,
+          words:wordBox.hasOwnProperty('words')? wordBox.words :false
+        };
+        var gWordBoxRef = ref.child(`global/wordboxes/${id}/wordbox`).set(wordBoxChecked);
+      }
+      else
+        var gWordBoxRef = ref.child(`global/wordboxes/${id}/wordbox`).remove();
+
+      return gWordBoxRef.then(()=>{
+        console.log("Global post on FB ");
+      })
+  };
+};
 export var startWordBoxUpdate = (id, itemUpdates)=>{
   return (dispatch, getState)=>{
     var wordBoxRef = ref.child(`users/${getState().authReducer.uid}/wordboxes/${id}`);
 
     return wordBoxRef.update(itemUpdates).then(()=>{
+      var wordBoxChecker =(getState().wordBoxesReducer).find(itm=>itm.id===id);
+      var gWBPVal= wordBoxChecker.gBoard;
+      if(itemUpdates.hasOwnProperty('gBoard'))gWBPVal=itemUpdates.gBoard;
+
       var wordBox= {id,...itemUpdates};
       dispatch(wordBoxUpdate(id,wordBox));
+      dispatch(globalWordBoxPost(id,gWBPVal));
       console.log("Edition WB: "+JSON.stringify({id,...itemUpdates})); //location.reload();  //dispatch(updateTodo(id,updates));
     });
   };
@@ -137,7 +433,6 @@ export var wordBoxAdd = (wordBox)=>{
     wordBox
   }
 };
-
 export var createWordBox = (newItem)=>{
   return (dispatch, getState)=>{
     //moment.unix(timestamp).format('MMM Do YYYY @ h:mm a');  when u need to use it
@@ -155,6 +450,8 @@ export var createWordBox = (newItem)=>{
         id:wordBoxRef.key,
         ...itemHelper
       }));
+      if(itemHelper.gBoard)
+        dispatch(globalWordBoxPost(wordBoxRef.key,newItem.gBoard));
       //console.log("it supouse that the upload was a successed");
     });
 
@@ -179,8 +476,6 @@ export var startDLWordBoxes = ()=>{
       var parsedWordBoxes = []; //redux expect to be an Array Object
       //we conver it
       Object.keys(wordBoxes).forEach((wordBoxId)=>{
-
-        //console.log("has words: "+(wordBoxes[wordBoxId]).hasOwnProperty('words'));
 
         if((wordBoxes[wordBoxId]).hasOwnProperty('words')){
 

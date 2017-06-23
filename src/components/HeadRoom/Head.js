@@ -7,7 +7,7 @@ import {AppBar,
     IconButton} from 'material-ui';
 
 
-import {drawerOpen,filterWordBoxesSearch} from '../../actions/Actions';
+import {drawerOpen,filterWordBoxesSearch,filterWordItemsBookmark} from '../../actions/Actions';
 
 import HeadRoom from 'react-headroom';
 //import '../css/home.css';
@@ -52,13 +52,26 @@ class Head extends Component {
           <Toolbar style={{marginTop:'5px',backgroundColor:'transparent',paddingLeft:24,paddingRight:0}}>
             <ToolbarGroup firstChild={true}>
             {/*}<ToolbarSeparator style={{backgroundColor:'#fff'}} />*/}
+            
               <IconButton onTouchTap={()=>{ this.setState({open:!this.state.open}); }}
                  style={{width:30,height:30,marginRight:0,padding:0,border:0}}>
                 <i style={{margin:'5px'}} className="material-icons md-light">search</i>
               </IconButton>
 
-              <FilterWB/>
-              <SortWB/>
+              {(this.props.section===1)&& <FilterWB/> }
+              {(this.props.section===1)&& <SortWB/> }
+              {(this.props.section===2)&&
+                <IconButton onTouchTap={()=>{ dispatch(filterWordItemsBookmark()); }}
+                   style={{width:30,height:30,marginRight:0,padding:0,border:0}}>
+                  <i style={{margin:'5px'}} className="material-icons md-light">{
+                    regularReducer.wiBookmark?'bookmark':'bookmark_border'
+                  }</i>
+                </IconButton>
+              }
+
+
+
+
 
 
             </ToolbarGroup>
@@ -76,14 +89,14 @@ class Head extends Component {
                 <i style={{margin:'5px'}} className="material-icons md-dark">search</i>
               </IconButton>
 
-              <TextField style={{display:'inline-block', verticalAlign:'top', width:220}}
+              <TextField style={{display:'inline-block', verticalAlign:'top', width:'70%'}}
                 hintText="Search" underlineStyle={{borderColor:'#EEEEEE'}} underlineFocusStyle={{borderColor:'#EEEEEE'}}
                 ref={(input) => { this.nameInput = input; }}
                 value={regularReducer.wbSearch}
                 onChange={(e)=>dispatch(filterWordBoxesSearch(e.target.value))}
               />
               <IconButton  onTouchTap={()=>{this.setState({open:!this.state.open});
-                                            dispatch(filterWordBoxesSearch(''));    }} 
+                                            dispatch(filterWordBoxesSearch(''));    }}
               iconStyle={{marginTop:12}} style={{position:'absolute',right:10,display:'inline-block',width:30,height:30,marginRight:0,padding:0,border:0}}>
                 <i style={{margin:'5px'}} className="material-icons md-dark">cancel</i>
               </IconButton>

@@ -3,11 +3,12 @@ import {connect} from 'react-redux';
 
 import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import {TextField,Toggle} from 'material-ui';
+import {TextField,Toggle,Snackbar,Dialog} from 'material-ui';
 
 import { teal600} from 'material-ui/styles/colors';
 
-import {startLoginGoogle,startLoginGitHub, startLoginEmail, createAccount} from '../../actions/Actions';
+import {startLoginGoogle,startLoginGitHub, startLoginEmail, createAccount,loginStat} from '../../actions/Actions';
+import {forgotUserPass} from '../../actions/ActUserBox';
 
 
 class SignUp extends Component {
@@ -16,8 +17,11 @@ class SignUp extends Component {
     this.state = {
      expanded: false,
      newAccount: false,
-     txName:'',txLast:'',
-     txEmail:'',txPass:''
+     txEmail:'',txPass:'',
+     loginStatActive:false,
+     restorePass:false,
+     dialogRePass:false,
+     emailRePass:''
     };
   }
   handleExpandChange = (expanded) => {
@@ -52,6 +56,27 @@ class SignUp extends Component {
 
   render() {
 
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onTouchTap={()=>{this.setState({dialogRePass:false});this.setState({emailRePass:''});}}
+      />,
+      <FlatButton
+        label="Send"
+        primary={true}
+        keyboardFocused={true}
+        onTouchTap={()=>{
+          var {dispatch} = this.props;
+          dispatch(forgotUserPass(this.state.emailRePass));
+          this.setState({dialogRePass:false});
+          this.setState({restorePass:true});
+          this.setState({emailRePass:''});
+        }}
+      />,
+    ];
+
+    var {dispatch,regularReducer}=this.props;
     return (
       <div className="signin-box">
         <Card expanded={this.state.expanded} onExpandChange={this.handleExpandChange} style={{margin:10,maxWidth:280}}>
@@ -71,14 +96,6 @@ class SignUp extends Component {
         toggled={this.state.newAccount}
         onToggle={this.handleSignIn}
       />
-      <TextField style={{margin:5, maxWidth:100, display:(this.state.newAccount?'inline-block':'none')}}
-        hintText="Name"  floatingLabelText="Name"
-        id="su_name"
-        onChange={(e)=>{this.setState({txName: e.target.value});}} />
-      <TextField style={{margin:5, maxWidth:100, display:(this.state.newAccount?'inline-block':'none')}}
-        hintText="Last Name"  floatingLabelText="Last Name"
-        id="su_last"
-        onChange={(e)=>{this.setState({txLast: e.target.value});}} />
       <TextField style={{margin:5, maxWidth:200}}
         hintText="eMail"  floatingLabelText="eMail"
         id="su_email"
@@ -91,16 +108,51 @@ class SignUp extends Component {
     <CardActions expandable={true}>
       <FlatButton onTouchTap={ () => {
         var {dispatch} = this.props;
+        this.setState({loginStatActive:true});
         dispatch(createAccount(this.state.txEmail,this.state.txPass));
         } }
-        label="Create Account"  style={{display:(this.state.newAccount?'block':'none')}}/>
+        label="Create Account"  style={{display:(this.state.newAccount?'inline-block':'none')}}/>
       <FlatButton onTouchTap={ () => {
         var {dispatch} = this.props;
+        this.setState({loginStatActive:true});
         dispatch(startLoginEmail(this.state.txEmail,this.state.txPass));
         } }
-        label="LogIn" style={{display:(!this.state.newAccount?'block':'none')}} />
+        label="LogIn" style={{display:(!this.state.newAccount?'inline-block':'none')}} />
+        <FlatButton onTouchTap={ () => {  this.setState({dialogRePass:true});} }
+          label="Forgot" style={{display:(!this.state.newAccount?'inline-block':'none')}} />
     </CardActions>
   </Card>
+
+  <Dialog contentStyle={{width:'95%',maxWidth:350,transform: 'translate(0px, 5px)',minHeight:140}}
+          bodyStyle={{minHeight:140}}
+          style={{minHeight:140,paddingTop:0}}
+        repositionOnUpdate={true}
+        autoDetectWindowHeight={false}
+        title="Restore Password By Email"
+        actions={actions}
+        modal={false}
+        open={this.state.dialogRePass}
+      >
+    <TextField style={{margin:5,width:'80%'}}
+      hintText="Email"  floatingLabelText="Send to this Email" type="email"
+      value={this.state.emailRePass}
+      onChange={(e)=>{ this.setState({emailRePass: e.target.value});}} />
+    </Dialog>
+
+  <Snackbar style={{position:'fixed',bottom:20 }}
+      open={(!regularReducer.loginStat && this.state.loginStatActive)}
+      message={"SignIn Fail"}
+      action="close"
+      onActionTouchTap={()=>{dispatch(loginStat(true));
+        this.setState({loginStatActive:false});
+      }}/>
+      <Snackbar style={{position:'fixed',bottom:20 }}
+          open={this.state.restorePass}
+          message={"Email send to restore password"}
+          action="close"
+          onActionTouchTap={()=>{dispatch(loginStat(true));
+            this.setState({restorePass:false});
+          }}/>
       </div>
     );
   }

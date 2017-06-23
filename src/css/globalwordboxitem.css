@@ -1,0 +1,19 @@
+
+
+.gwb_words {
+  min-width:310;
+  width:35%;
+}
+.gwb_comments{
+  min-width:310;
+  width:58%;
+}
+
+@media screen and (max-width: 760px) {
+  .gwb_words {
+    width: 95%;
+  }
+  .gwb_comments{
+    width: 95%;
+  }
+}

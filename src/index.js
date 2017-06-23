@@ -24,7 +24,9 @@ var initialState ={
     wbGBoard:false,
     wbFBoard:false,
     wbSortBy:'aZ',
-    wbSearch:''
+    wbSearch:'',
+    wiBookmark:false,
+    loginStat:false
   }
 };
 var store = configureStore(initialState);
@@ -46,19 +48,23 @@ const muiTheme = getMuiTheme({
 //var userData ={uid:'user.uid',email:'user.email'};
 //store.dispatch(login(userData));
  auth.onAuthStateChanged(function(user){
+   var auxPhoto="https://firebasestorage.googleapis.com/v0/b/thamcook.appspot.com/o/images%2FScreenshot_20170302-203202.png?alt=media&token=3c589ec6-cab6-43ec-b4b4-38d502d8c079";
   if(user){
     var userData ={uid:user.uid,
         email:user.email,
-        displayName:user.displayName,
-        photoURL:user.photoURL};
-    //console.log("User UID: "+JSON.stringify(user));
+        displayName:user.displayName!==null?user.displayName:(user.email).substring(0, 9)+"...",
+        photoURL:user.photoURL!==null?user.photoURL:auxPhoto,
+        provider:user.providerData[0]['providerId']
+      };
+        console.log(user);
+    //console.log(user);
     store.dispatch(login(userData));
     store.dispatch(startDLWordBoxes());
     //store.dispatch(startAddTodos());
-    //hashHistory.replace('/WordBoxes'); //this should be an action "Edit Mode"
+    hashHistory.replace('/WordBoxes'); //this should be an action "Edit Mode"
   }else{
     store.dispatch(logout());
-    //hashHistory.replace('/');  //this should be an action "Exit Edit Mode"
+    hashHistory.replace('/');  //this should be an action "Exit Edit Mode"
   }
 });
 

@@ -14,7 +14,7 @@ class WordList extends Component {
     var {wordBoxesReducer}=this.props;
     return (
       <div>
-        <Head title={(wordBoxesReducer.find(this.findName)).boxName} />
+        <Head title={wordBoxesReducer.length>0 && (wordBoxesReducer.find(this.findName)).boxName} section={2}/>
         <WordItemList wordListN={this.props.params.wordListN} type={1} />
       </div>
     );

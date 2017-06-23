@@ -1,6 +1,12 @@
 import {auth, github,google} from '../firebase/constants';
 //import firebase here to handle async task
 
+
+export var filterWordItemsBookmark = ()=>{
+  return {
+    type:'FILTER_WORDITEMS_BOOKMARK'
+  }
+};
 export var filterWordBoxesSearch = (wbSearch)=>{
   return {
     type:'FILTER_WORDBOXES_SEARCH',
@@ -41,6 +47,12 @@ export var login = (userData)=>{
     userData
   };
 };
+export var loginStat =(loginStat)=>{
+  return{
+      type:'LOGIN_STAT',
+      loginStat
+  };
+};
 
 export var startLoginGoogle = ()=>{
   return (dispatch, getState)=>{
@@ -78,10 +90,12 @@ export var startLoginEmail = (email, password)=>{
         .then(
           function(result) {
             console.log('Login Worked: ', result);
+            dispatch(loginStat(true));
           })
         .catch(
           function(error) {
             console.log('Login unable: ', error);
+            dispatch(loginStat(false));
           }
       );
     };
@@ -92,10 +106,12 @@ export var createAccount = (email, password)=>{
         .then(
           function(result) {
             console.log('Create Worked: ', result);
+            dispatch(loginStat(true));
           })
         .catch(
           function(error) {
             console.log('Create unable: ', error);
+            dispatch(loginStat(false));
           }
       );
     };

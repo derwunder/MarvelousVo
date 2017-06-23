@@ -82,7 +82,11 @@ class WordItemEdit extends Component {
     return (
       <div >
 
-    <Dialog contentStyle={{width:'95%',maxWidth:550}}
+    <Dialog contentStyle={{width:'95%',maxWidth:550,transform: 'translate(0px, 5px)',minHeight:140}}
+            bodyStyle={{minHeight:140}}
+            style={{minHeight:140,paddingTop:0}}
+          repositionOnUpdate={true}
+          autoDetectWindowHeight={false}
           title="Word Term Editor"
           actions={actions}
           modal={true}

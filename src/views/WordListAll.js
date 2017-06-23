@@ -9,7 +9,7 @@ class WordListAll extends Component {
   render() {
     return (
       <div>
-        <Head title={"All Words"}/>
+        <Head title={"All Words"} section={2}/>
         <WordItemList  type={2} />
       </div>
     );

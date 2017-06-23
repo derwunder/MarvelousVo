@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 
 //import '../css/home.css';
 import '../css/wordbox.css';
@@ -11,7 +12,11 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 // From https://github.com/oliviertassinari/react-swipeable-views
 import SwipeableViews from 'react-swipeable-views';
 
+
 import Head from '../components/HeadRoom/Head';
+import WordBoxListGlobal from '../components/WordBoxesGlobal/WordBoxListGlobal';
+//import WordBoxList from '../components/WordBoxes/WordBoxList';
+
 
 const styles = {
   headline: {
@@ -41,28 +46,33 @@ class GlobalBoard extends Component {
   render() {
     return (
       <div>
-        <Head title={"Global Board"}/>
+        <Head title={"Global Board"} section={1}/>
         <Tabs
           onChange={this.handleChange}
           value={this.state.slideIndex}
           >
-          <Tab label="Words" value={0} />
-          <Tab label="Idioms" value={1} />
+          <Tab label="World Boxes" value={0} />
+          <Tab label="My Posts" value={1} />
           </Tabs>
           <SwipeableViews
            index={this.state.slideIndex}
            onChangeIndex={this.handleChange}
           >
            <div>
-             <h2 style={styles.headline}>Tabs with slide effect</h2>
-              Swipe to see the next slide.<br />
+
+              <WordBoxListGlobal type={1}/>
+
            </div>
-           <div style={styles.slide}>
-             <WordBox pic={true}/>
+           <div>
+            <WordBoxListGlobal type={2}/>
            </div>
           </SwipeableViews>
       </div>
     );
   }
 }
-export default GlobalBoard;
+export default connect(
+  (state) => {
+    return state;
+  }
+)  (GlobalBoard);

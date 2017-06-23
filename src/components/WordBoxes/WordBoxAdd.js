@@ -73,7 +73,11 @@ class WordBoxAdd extends Component {
           <i className="material-icons md-24 md-light " aria-hidden="true">add</i>
     </FloatingActionButton>
 
-    <Dialog contentStyle={{width:'95%',maxWidth:350}}
+    <Dialog contentStyle={{width:'95%',maxWidth:350,transform: 'translate(0px, 5px)',minHeight:140}}
+            bodyStyle={{minHeight:140}}
+            style={{minHeight:140,paddingTop:0}}
+          repositionOnUpdate={true}
+          autoDetectWindowHeight={false}
           title="New Word Box"
           actions={actions}
           modal={false}

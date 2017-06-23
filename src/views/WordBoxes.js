@@ -9,7 +9,7 @@ class WordBoxes extends Component {
   render() {
 
     return (<div>
-      <Head title={"Word Boxes"} />
+      <Head title={"Word Boxes"} section={1}/>
       <WordBoxList type={1}/>
       <WordBoxAdd/>
     </div>

@@ -1,6 +1,84 @@
 import moment from 'moment';
 
 module.exports = {
+  filterWBGReplys: function(replys){
+    var filteredWBGR =replys;
+    filteredWBGR.sort(function(a, b) {
+      var termA = a.replyTime ;   //.toUpperCase(); // ignore upper and lowercase
+      var termB = b.replyTime ;  //.toUpperCase(); // ignore upper and lowercase
+      if (termA < termB) {  return 1;  }
+      if (termA > termB) {  return -1;   }
+      // names must be equal
+      return 0;
+    });
+    return filteredWBGR;
+
+  },
+  filterWBGComments: function(comments,searchText){
+    var filteredWBGC =comments;
+      searchText=searchText.toLowerCase();
+
+      filteredWBGC =filteredWBGC.filter((comment)=>{
+        var cmt = comment.comment.toLowerCase(); //.toLowerCase(); just to non sensitive case
+        var userName = comment.hasOwnProperty('commentUName')? (comment.commentUName).toLowerCase():'null' ;
+        return searchText.length === 0 || cmt.indexOf(searchText) > -1 ||userName.indexOf(searchText)>-1 ;
+      });
+
+    filteredWBGC.sort(function(a, b) {
+      var termA = a.commentTime ;   //.toUpperCase(); // ignore upper and lowercase
+      var termB = b.commentTime ;  //.toUpperCase(); // ignore upper and lowercase
+      if (termA < termB) {  return 1;  }
+      if (termA > termB) {  return -1;   }
+      // names must be equal
+      return 0;
+    });
+    return filteredWBGC;
+
+  },
+  filterWordsGlobal: function (wordsG, bookmark, searchText){
+    var filteredWordsG =wordsG;
+    searchText=searchText.toLowerCase();
+
+    if(bookmark){
+      filteredWordsG =filteredWordsG.filter((wi)=>{
+        return wi.bookmark===true || wi.gBoard===bookmark ;
+      });
+    }
+
+    filteredWordsG =filteredWordsG.filter((wi)=>{
+      var wordTerm = wi.wordTerm.toLowerCase(); //.toLowerCase(); just to non sensitive case
+      return searchText.length === 0 || wordTerm.indexOf(searchText) > -1 ;
+    });
+
+    filteredWordsG.sort(function(a, b) {
+      var termA = a.wordTerm.toUpperCase();   //.toUpperCase(); // ignore upper and lowercase
+      var termB = b.wordTerm.toUpperCase();  //.toUpperCase(); // ignore upper and lowercase
+      if (termA < termB) {  return -1;  }
+      if (termA > termB) {  return 1;   }
+      // names must be equal
+      return 0;
+    });
+    return filteredWordsG;
+  },
+  filterWordBoxesGlobal: function (wordBoxesG, tp, uid){
+    var filteredWordBoxesG =wordBoxesG;
+
+    if(tp===2){
+      filteredWordBoxesG =filteredWordBoxesG.filter((wb)=>{
+        var id= wb.wordbox.createBy;
+        return id===uid;  //uid.length === 0 || id.indexOf(uid) > -1 ;
+      });
+    }
+    filteredWordBoxesG.sort(function(a, b) {
+      var termA = a.wordbox.boxName.toUpperCase();   //.toUpperCase(); // ignore upper and lowercase
+      var termB = b.wordbox.boxName.toUpperCase();  //.toUpperCase(); // ignore upper and lowercase
+      if (termA < termB) {  return -1;  }
+      if (termA > termB) {  return 1;   }
+      // names must be equal
+      return 0;
+    });
+    return filteredWordBoxesG;
+  },
   filterWordBoxes: function(wordBoxes, type, favorite, fBoard, gBoard,searchText ,wbSortBy){
     searchText=searchText.toLowerCase();
     var filteredWordBoxes =wordBoxes;
@@ -71,9 +149,21 @@ module.exports = {
 
     return filteredWordBoxes;
   },
-  filterWords: function(words){
-
+  filterWords: function(words,bookmark,searchText){
+    searchText=searchText.toLowerCase();
     var filteredWords =words;
+
+    if(bookmark){
+      filteredWords =filteredWords.filter((wi)=>{
+        return wi.bookmark===true || wi.gBoard===bookmark ;
+      });
+    }
+
+    filteredWords =filteredWords.filter((wi)=>{
+      var wordTerm = wi.wordTerm.toLowerCase(); //.toLowerCase(); just to non sensitive case
+      return searchText.length === 0 || wordTerm.indexOf(searchText) > -1 ;
+    });
+
     //Order by Name!!!
     filteredWords.sort(function(a, b) {
       var termA = a.wordTerm.toUpperCase();   //.toUpperCase(); // ignore upper and lowercase
@@ -84,45 +174,6 @@ module.exports = {
       return 0;
     });
     return filteredWords;
-  },
-  filterRecipes: function(recipes,  searchText, searchCategoria, searchFavorito){
-    searchText=searchText.toLowerCase();
-    var filteredRecipes = recipes;
-
-    //Filter by Completed
-  /*  filteredRecipes =filteredRecipes.filter((todo)=>{
-      return !todo.completed || showCompleted;
-    });*/
-
-    //filter by search
-    filteredRecipes =filteredRecipes.filter((recipe)=>{
-      var titulo = recipe.titulo.toLowerCase(); //.toLowerCase(); just to non sensitive case
-      return searchText.length === 0 || titulo.indexOf(searchText) > -1 ;
-    });
-
-    //filter by Categoria
-    filteredRecipes =filteredRecipes.filter((recipe)=>{
-      var categoria = recipe.categCol; //.toLowerCase(); just to non sensitive case
-      return searchCategoria.length === 0 || categoria.indexOf(searchCategoria) > -1 ;
-    });
-
-    //filter by Categoria
-    filteredRecipes =filteredRecipes.filter((recipe)=>{
-      //var categoria = recipe.favorito; //.toLowerCase(); just to non sensitive case
-      return recipe.favorito===true || recipe.favorito===searchFavorito ;
-    });
-
-    //Sort by completed
-  /*  filteredRecipes.sort((a,b)=>{
-      if(!a.completed && b.completed)
-        return -1;
-      else if(a.completed && !b.completed)
-        return 1;
-      else
-        return 0;
-
-    });*/
-
-    return filteredRecipes;
   }
+
 };

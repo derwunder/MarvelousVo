@@ -43,7 +43,9 @@ class WordItemDelete extends Component {
     return (
       <div>
 
-    <Dialog contentStyle={{width:'95%',maxWidth:350}}
+    <Dialog contentStyle={{width:'95%',maxWidth:350,transform: 'translate(0px, 5px)'}}
+          repositionOnUpdate={true}
+          autoDetectWindowHeight={false}
           title="Delete Word Term"
           actions={actions}
           modal={true}

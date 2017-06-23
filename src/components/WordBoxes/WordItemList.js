@@ -16,20 +16,22 @@ class WordItemList extends Component {
       //this.mapTp1= this.mapTp1.bind(this);
   }
 
-  mapTp1 = (oB) =>  {
-  return  wordBoxAPI.filterWords(oB).map((item,index)=>{
+  mapTp1 = (oB,bookmark,tSrch) =>  {
+  return  wordBoxAPI.filterWords(oB,bookmark,tSrch).map((item,index)=>{
       return <div key={item.id} ><WordItem wordBoxId={this.props.wordListN} item={item}/><Divider/> </div>
     });
   };
 
-  mapTp2 = (oB) => {
-    return  wordBoxAPI.filterWords(oB).map((item,index)=>{
+  mapTp2 = (oB,bookmark,tSrch) => {
+    return  wordBoxAPI.filterWords(oB,bookmark,tSrch).map((item,index)=>{
         return <div key={item.id} ><WordItem wordBoxId={item.idWB} item={item}/><Divider/> </div>
       });
   };
 
   render() {
-    var {wordBoxesReducer}=this.props;
+    var {wordBoxesReducer,regularReducer}=this.props;
+    var tSrch=regularReducer.wbSearch;
+    var bookmark= regularReducer.wiBookmark;
     var oB =[],idWB=[];
     if(this.props.type===1){
       wordBoxesReducer.map(item=>{
@@ -54,7 +56,7 @@ class WordItemList extends Component {
     return (<div>
         <List>
 
-          {this.props.type===1?this.mapTp1(oB):this.props.type===2?this.mapTp2(oB):<div/>}
+          {this.props.type===1?this.mapTp1(oB,bookmark,tSrch):this.props.type===2?this.mapTp2(oB,bookmark,tSrch):<div/>}
 
         </List>
         {this.props.type===1?<WordItemAdd wordBoxId={this.props.wordListN}/>:<div/>}

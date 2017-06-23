@@ -10,6 +10,7 @@ import ActionViewList from 'material-ui/svg-icons/action/view-list';
 import ActionViewModule from 'material-ui/svg-icons/action/view-module';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import ActionDashBoard from 'material-ui/svg-icons/action/dashboard';
+import ActionFriendBoard from 'material-ui/svg-icons/action/supervisor-account';
 import ImageViewComfy from 'material-ui/svg-icons/image/view-comfy';
 import ComContacts from 'material-ui/svg-icons/communication/contacts';
 import ActionLang from 'material-ui/svg-icons/action/language';
@@ -21,7 +22,7 @@ import {drawerOpen,logoutFB} from '../../actions/Actions';
 class DrawerCO extends Component {
 
   render() {
-    var {dispatch,regularReducer} = this.props;
+    var {dispatch,regularReducer,authReducer} = this.props;
 
     return (
       <div>
@@ -29,9 +30,11 @@ class DrawerCO extends Component {
           open={regularReducer.drawerOpen}
           onRequestChange={(open) => dispatch(drawerOpen()) }>
           <List style={{background:"#004D40"}}>
-            <ListItem primaryText="Der Wunder Nunez"
-              secondaryText={<p style={{color: "#fff"}}>der.wunder.nv@gmail.com</p>}  style={{ color:'#fff'}}
-              leftAvatar={<Avatar size={50} src="https://firebasestorage.googleapis.com/v0/b/thamcook.appspot.com/o/images%2FScreenshot_20170302-203202.png?alt=media&token=3c589ec6-cab6-43ec-b4b4-38d502d8c079" />} />
+            <Link style={{textDecoration:'none'}} to="/Profile" onClick={()=>dispatch(drawerOpen())}>
+              <ListItem primaryText={authReducer.displayName}
+                secondaryText={<p style={{color: "#fff"}}>{authReducer.email}</p>}  style={{ color:'#fff'}}
+                leftAvatar={<Avatar size={50} src={authReducer.photoURL} />} />
+            </Link>
             <ListItem primaryText="Notifications" style={{ color:'#fff'}} leftIcon={<Notifications color={white}/>} rightIcon={<Badge badgeContent={4} secondary={true} badgeStyle={{top: 2, right: 2}}/>} />
           </List>
           <List>
@@ -48,7 +51,7 @@ class DrawerCO extends Component {
             <Divider/>
             <Subheader>Contacts</Subheader>
             <Link style={{textDecoration:'none'}} to="/FriendBoard" onClick={()=>dispatch(drawerOpen())}>
-              <ListItem primaryText="Friend Board" leftIcon={<ActionDashBoard/>} />
+              <ListItem primaryText="Friend Board" leftIcon={<ActionFriendBoard/>} />
             </Link>
             <Link style={{textDecoration:'none'}} to="/FriendList" onClick={()=>dispatch(drawerOpen())}>
               <ListItem primaryText="Friend List" leftIcon={<ComContacts/>} />
