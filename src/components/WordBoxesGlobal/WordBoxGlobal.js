@@ -70,7 +70,7 @@ class WordBoxGlobal extends Component {
 
           <div style={{marginLeft:5,marginRight:10}}>
               <p style={{color:'rgba(0, 0, 0, 0.7)',width:95, margin:5,fontSize:13,display:'inline-block',verticalAlign:'top'}}>
-                0 Downloads
+                {this.props.downloads} Downloads
               </p>
               <i style={{display:'inline-block'}}
                  className={"material-icons md-18 md-dark"} aria-hidden="true">file_download</i>

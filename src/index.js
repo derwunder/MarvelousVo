@@ -61,10 +61,10 @@ const muiTheme = getMuiTheme({
     store.dispatch(login(userData));
     store.dispatch(startDLWordBoxes());
     //store.dispatch(startAddTodos());
-    hashHistory.replace('/WordBoxes'); //this should be an action "Edit Mode"
+    //hashHistory.replace('/WordBoxes'); //this should be an action "Edit Mode"
   }else{
     store.dispatch(logout());
-    hashHistory.replace('/');  //this should be an action "Exit Edit Mode"
+    //hashHistory.replace('/');  //this should be an action "Exit Edit Mode"
   }
 });
 

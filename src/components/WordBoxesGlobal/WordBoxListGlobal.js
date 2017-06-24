@@ -32,9 +32,11 @@ var {wbFavorite,wbFBoard,wbGBoard,wbSearch,wbSortBy} =this.props.regularReducer;
           var uid=authReducer.uid;
         return (
           wordBoxAPI.filterWordBoxesGlobal(gWordBoxesReducer,tp,uid).map((item,index)=>{
+            var gWBDls=0;
+            item.hasOwnProperty('downloads')?gWBDls=Object.keys(item.downloads).length:gWBDls=0;
             if(item.hasOwnProperty('id'))
             return <div key={"gKey"+index}>
-              <WordBoxGlobal pic={value2} item={item.wordbox} id={item.id}/></div>
+              <WordBoxGlobal pic={value2} item={item.wordbox} downloads={gWBDls} id={item.id}/></div>
           })
         );
       }

@@ -42,10 +42,12 @@ class Routes extends Component {
 
     return (
       <Router history={hashHistory}>
-        <Route path="/" component={MainPage} onEnter={requireLogout}>
+        <Route path="/" component={MainPage}  //onEnter={requireLogout}
+        >
           <IndexRoute component={Home} />
         </Route>
-        <Route path="/WordBoxes" component={UserPage} onEnter={requireLogin}>
+        <Route path="/WordBoxes" component={UserPage} //onEnter={requireLogin}
+        >
           <IndexRoute component={WordBoxes}/>
           <Route path="/Profile" component={UserProfile} />
           <Route path="/WordBoxes/:wordListN" component={WordList} />
@@ -54,7 +56,8 @@ class Routes extends Component {
           <Route path="/FriendBoard" component={FriendBoard}/>
           <Route path="/FriendList" component={FriendList}/>
         </Route>
-        <Route path="/GlobalBoard" component={GlobalPage} onEnter={requireLogin}>
+        <Route path="/GlobalBoard" component={GlobalPage} //onEnter={requireLogin}
+        >
           <IndexRoute component={GlobalBoard} />
           <Route path="/GlobalBoard/:wordboxId" component={GlobalBoardWordBox} />
         </Route>

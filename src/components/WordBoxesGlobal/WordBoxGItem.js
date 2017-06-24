@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
 //import '../css/home.css';
-import {Card, CardActions, CardMedia, CardTitle,CardHeader} from 'material-ui/Card';
-import {List,ListItem,Subheader,Divider,FloatingActionButton, Chip, Avatar,Paper} from 'material-ui';
+import {Card,CardText, CardActions, CardMedia, CardTitle,CardHeader} from 'material-ui/Card';
+import {List,ListItem,Subheader,Divider,FloatingActionButton, Chip, Avatar,Paper,Dialog,FlatButton} from 'material-ui';
 import {teal300, teal700} from 'material-ui/styles/colors';
 
 import {IconButton, TextField,RaisedButton} from 'material-ui';
 
-import {checkIfWordBoxExist,startLikeWordBox} from '../../actions/ActWordBox';
+import {checkIfWordBoxExist,startLikeWordBox,startDLGWordBox} from '../../actions/ActWordBox';
 import WordBoxGItemWords from './WordBoxGItemWords';
 import WordBoxGItemComments from './WordBoxGItemComments';
+import WordBoxGItemMakers from './WordBoxGItemMakers';
 import wordBoxAPI from '../../api/wordBoxAPI';
 
 import moment from 'moment';
@@ -20,56 +21,70 @@ import '../../css/globalwordboxitem.css';
 class WordBoxGItem extends Component {
   constructor(props) {
    super(props);
-   //this.state = {comment:false};
+   this.state = {
+     dlDialog:false,
+     boxName:''
+    };
       var {dispatch} = this.props;
       //dispatch(checkIfWordBoxExist(this.props.wordListN));
       //this.mapTp1= this.mapTp1.bind(this);
   }
 
-  /*mapTp1 = (oB,bookmark,tSrch) =>  {
-  return  wordBoxAPI.filterWords(oB,bookmark,tSrch).map((item,index)=>{
-      return <div key={item.id} ><WordItem wordBoxId={this.props.wordListN} item={item}/><Divider/> </div>
+  handledlDi =()=>{this.setState({dlDialog:!this.state.dlDialog})};
+  handleDLGWB = () => {
+    var {gWordBoxesReducer,dispatch}=this.props;
+    var gItem=  gWordBoxesReducer.find(wb=>wb.id===this.props.wordboxId)  ;
+
+    var words={};
+    (gItem.wordbox.words).map(wd=>{
+      words[wd.id] = {wordTerm:wd.wordTerm,bookmark:wd.bookmark,definitions:wd.definitions,translations:wd.translations,tags:wd.tags};
     });
+
+    var makers=[];
+    if((gItem.wordbox).hasOwnProperty('makers')){
+      makers=gItem.wordbox.makers;
+    }
+    makers.push({makerUID:gItem.wordbox.createBy,makerName:gItem.wordbox.creatorName, makerAvatar:gItem.wordbox.creatorAvatar});
+    var newWBCloud={
+      boxName:this.state.boxName,
+      favorite:false,
+      fBoard:false,
+      gBoard:false,
+      words:words,
+      makers:makers
+    };
+    var newWBLocal={
+      boxName:this.state.boxName,
+      favorite:false,
+      fBoard:false,
+      gBoard:false,
+      words:gItem.wordbox.words,
+      makers:makers
+    }
+    dispatch(startDLGWordBox(this.props.wordboxId,newWBCloud,newWBLocal));
+    this.setState({dlDialog:!this.state.dlDialog});
   };
 
-  mapTp2 = (oB,bookmark,tSrch) => {
-    return  wordBoxAPI.filterWords(oB,bookmark,tSrch).map((item,index)=>{
-        return <div key={item.id} ><WordItem wordBoxId={item.idWB} item={item}/><Divider/> </div>
-      });
-  };*/
+
 
   render() {
-  /*  var {wordBoxesReducer,regularReducer}=this.props;
-    var tSrch=regularReducer.wbSearch;
-    var bookmark= regularReducer.wiBookmark;
-    var oB =[],idWB=[];
-    if(this.props.type===1){
-      wordBoxesReducer.map(item=>{
-        if(item.id===this.props.wordListN){
-          item.hasOwnProperty('words')?
-            oB=item.words:oB=[];
-        }
-        return item;
-      });
-    }else if(this.props.type===2){
-      wordBoxesReducer.map(item=>{
-        if(item.hasOwnProperty('words')){
-            (item.words).map(wd=>{
-              oB.push({idWB:item.id,...wd})
-            });
-        }
-        return item;
-      });
-    }*/
+
     var {regularReducer}=this.props;
 
       var {dispatch,gWordBoxesReducer,authReducer}=this.props;
       var uid=authReducer.uid;
-      var gItem, gWB=[], gWBLike={},gWBDislike={},gWBWords=[], gWBComments=[];
-      var likeStatus=false, dislikeStatus=false;
+      var gItem, gWB=[], gWBMakers=[], gWBDls={}, gWBLike={},gWBDislike={},gWBWords=[], gWBComments=[];
+      var likeStatus=false, dislikeStatus=false, downloadsStatus=false;
       if(gWordBoxesReducer.length>0){
         gItem=  gWordBoxesReducer.find(wb=>wb.id===this.props.wordboxId)  ;
         gWB=gItem.wordbox;
+
+        if(gWB.hasOwnProperty('makers')){
+          gWBMakers=gWB.makers; 
+        }
+        if(gItem.hasOwnProperty('downloads')){
+          gWBDls=gItem.downloads; if((gItem.downloads).hasOwnProperty(uid)) downloadsStatus=true;
+        }
         if(gItem.hasOwnProperty('like')){
           gWBLike=gItem.like; if((gItem.like).hasOwnProperty(uid)) likeStatus=true;
         }
@@ -86,6 +101,20 @@ class WordBoxGItem extends Component {
 
 
 
+      const actions = [
+        <FlatButton
+          label="Cancel"
+          primary={true}
+          onTouchTap={this.handledlDi}
+        />,
+        <FlatButton
+          label="Save"
+          primary={true}
+          keyboardFocused={true}
+          onTouchTap={this.handleDLGWB}
+        />,
+      ];
+
     return (<div>
     <div  style={{textAlign:'center',margin:'auto',display:regularReducer.wbSearch===''?'block':'none'}}>
       <Card style={{margin:7, minWidth:310,width:'55%', display:'inline-block'}}>
@@ -95,7 +124,10 @@ class WordBoxGItem extends Component {
                  className={"material-icons md-18 md-dark"} aria-hidden="true">check</i></div>}
               avatar={gWB.creatorAvatar}
             />
-            <div>
+            <CardText style={{paddingTop:0}}>
+              <WordBoxGItemMakers makers={gWBMakers}/>
+            </CardText>
+        <div>
               <div style={{textAlign:'justify',display:'inline-block', float:'left', marginLeft:10}}>
                 <div style={{marginLeft:5,marginRight:10}}>
                   <i style={{display:'inline-block',marginRight:10}}
@@ -113,7 +145,7 @@ class WordBoxGItem extends Component {
                 <i style={{display:'inline-block',marginRight:10}}
                    className={"material-icons md-18 md-dark"} aria-hidden="true">file_download</i>
                     <p style={{color:'rgba(0, 0, 0, 0.7)',maxWidth:145, margin:5,fontSize:13,display:'inline-block',verticalAlign:'top'}}>
-                      0 Downloads</p>
+                      {Object.keys(gWBDls).length} Downloads</p>
                 </div>
                 <div style={{marginLeft:5,marginRight:10, paddingBottom:15}}>
                 <i style={{display:'inline-block',marginRight:10}}
@@ -125,12 +157,12 @@ class WordBoxGItem extends Component {
 
               <div style={{ float:'right',
                 textAlign:'right',display:'inline-block',verticalAlign:'top', marginRight:15}}>
-                <FloatingActionButton
+               {uid!==gWB.createBy&&  <FloatingActionButton
                   mini={true} style={{margin:5}}
-                  onTouchTap={()=>{ }}
+                  onTouchTap={this.handledlDi}
                   >
                     <i  className="material-icons md-20 md-light">cloud_download</i>
-                </FloatingActionButton>
+                </FloatingActionButton>}
                 <div style={{marginLeft:5,marginRight:10}}>
                   <p style={{color:'rgba(0, 0, 0, 0.7)',width:30, margin:5,fontSize:14,display:'inline-block'}}>
                      {Object.keys(gWBLike).length} </p>
@@ -150,7 +182,8 @@ class WordBoxGItem extends Component {
                         } aria-hidden="true">thumb_down</i>
                 </div>
               </div>
-            </div>
+        </div>
+
       </Card>
     </div>
 
@@ -159,6 +192,21 @@ class WordBoxGItem extends Component {
       <WordBoxGItemComments idWBG={this.props.wordboxId} comments={gWBComments} />
     </div>
 
+    <Dialog contentStyle={{width:'95%',maxWidth:350,transform: 'translate(0px, 5px)',minHeight:140}}
+            bodyStyle={{minHeight:140}}
+            style={{minHeight:140,paddingTop:0}}
+          repositionOnUpdate={true}
+          autoDetectWindowHeight={false}
+          title={"Save \""+gWB.boxName+"\" as"}
+          actions={actions}
+          modal={false}
+          open={this.state.dlDialog}
+        >
+      <TextField style={{margin:5,width:'80%'}}
+        hintText="Ej: Marvelous Box"  floatingLabelText="Box Name"
+        value={this.state.boxName}
+        onChange={(e)=>{ this.setState({boxName: e.target.value});}} />
+    </Dialog>
 
     <div style={{height:50}}></div>
     </div>

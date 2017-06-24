@@ -81,6 +81,51 @@ export var commentGlobalWordBox = (idWBG,newComment) =>{
   };
 };
 
+/***************GLOBAL WORD BOX DOWNLOAD ******************/
+export var dlGWordBox = (idWBG,uid,item)=>{
+  return{
+    type:'DOWNLOAD_GLOBAL_WORDBOX',
+    idWBG,
+    uid, item
+  };
+};
+export var startDLGWordBox =(idWBG,newItemCloud,newItemLocal)=>{
+  return (dispatch,getState)=>{
+
+    var itemHelper ={
+      ...newItemCloud,
+      createdAt: moment().valueOf(),
+      lastCheckedAt: moment().valueOf()
+     };
+    var wordBoxRef = ref
+    .child(`users/${getState().authReducer.uid}/wordboxes/`).push(itemHelper);
+
+    return wordBoxRef.then(()=>{
+      dispatch(wordBoxAdd({
+        id:wordBoxRef.key,
+        createdAt: moment().valueOf(),
+        lastCheckedAt: moment().valueOf(),
+        ...newItemLocal
+      }));
+      var uid= getState().authReducer.uid;
+      var gWB={};
+      var gWB =getState().gWordBoxesReducer.find(wb=>wb.id===idWBG);
+      if(gWB.hasOwnProperty('downloads')){
+        if((gWB.downloads).hasOwnProperty(uid));
+      }
+      var itemLocal= {}; itemLocal[uid]=true;
+
+      var gWordBoxLikeRef = ref.child(`global/wordboxes/${idWBG}/downloads`);
+      var mergedUpdate = {};
+      mergedUpdate[uid] =  true;
+      gWordBoxLikeRef.update(mergedUpdate).then(()=>{
+        dispatch(dlGWordBox(idWBG,uid,itemLocal))
+      });
+    });
+
+  };
+};
+
 /******** GLOBAL WORD BOX LIKE ******/
 export var likeWordBox = (idWBG,uid,item)=>{
   return{
@@ -221,8 +266,6 @@ export var startDLGWordBoxes = () =>{
   };
 };
 
-
-
 /*****DELETE WORD ITEM******/
 export var wordItemDelete = (idWB,idWI)=>{
   return {
@@ -292,13 +335,19 @@ var globalWordBoxWords = (id) =>{
 };
 export var startWordItemUpdate = (idWB,idWI, itemUpdates)=>{
   return (dispatch, getState)=>{
+
+    var itemHelper ={
+      ...itemUpdates,
+      lastUpdatedAt: moment().valueOf()
+    };
+
     var wordItemRef = ref.child(`users/${getState().authReducer.uid}/wordboxes/${idWB}/words/${idWI}`);
 
-    return wordItemRef.update(itemUpdates).then(()=>{
+    return wordItemRef.update(itemHelper).then(()=>{
     //  var wordItem= {idWI,...itemUpdates};
-      dispatch(wordItemUpdate(idWB,idWI,itemUpdates));
+      dispatch(wordItemUpdate(idWB,idWI,itemHelper));
       dispatch(globalWordBoxWords(idWB));
-      console.log("Edition WI: "+JSON.stringify({idWI,...itemUpdates})); //location.reload();  //dispatch(updateTodo(id,updates));
+      console.log("Edition WI: "+JSON.stringify({idWI,...itemHelper})); //location.reload();  //dispatch(updateTodo(id,updates));
     });
   };
 };
@@ -315,18 +364,18 @@ export var createWordItem = (newItem,wordBoxId)=>{
   return (dispatch, getState)=>{
     //moment.unix(timestamp).format('MMM Do YYYY @ h:mm a');  when u need to use it
     //two moments use a.diff(b, 'days') to get the diferences in days
-    /*var itemHelper ={
+    var itemHelper ={
       ...newItem,
       createdAt: moment().valueOf(),
-      lastCheckedAt: moment().valueOf()
-    };*/
+      lastUpdatedAt: moment().valueOf()
+    };
     var wordItemRef = ref
-    .child(`users/${getState().authReducer.uid}/wordboxes/${wordBoxId}/words/`).push(newItem);
+    .child(`users/${getState().authReducer.uid}/wordboxes/${wordBoxId}/words/`).push(itemHelper);
 
     return wordItemRef.then(()=>{
       dispatch(wordItemAdd({
         id:wordItemRef.key,
-        ...newItem
+        ...itemHelper
       },wordBoxId));
       dispatch(globalWordBoxWords(wordBoxId));
       console.log("Check FB");
@@ -397,7 +446,8 @@ var globalWordBoxPost = (id,gBoard) =>{
           createBy:getState().authReducer.uid,
           creatorName:getState().authReducer.displayName,
           creatorAvatar:getState().authReducer.photoURL,
-          words:wordBox.hasOwnProperty('words')? wordBox.words :false
+          words:wordBox.hasOwnProperty('words')? wordBox.words :false,
+          makers:wordBox.hasOwnProperty('makers')?wordBox.makers :[]
         };
         var gWordBoxRef = ref.child(`global/wordboxes/${id}/wordbox`).set(wordBoxChecked);
       }

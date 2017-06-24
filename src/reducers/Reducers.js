@@ -24,6 +24,18 @@ export var authReducer = (state = {}, action) => {
 
 export var gWordBoxesReducer = (state=[],action) =>{
   switch (action.type) {
+    case 'DOWNLOAD_GLOBAL_WORDBOX':
+      return state.map(wb=>{
+        if(wb.id===action.idWBG){
+          return{
+            ...wb,
+            downloads: wb.hasOwnProperty('downloads') ? Object.assign({},wb.downloads,action.item):action.item
+          };
+        }
+        else {
+          return wb;
+        }
+      });
     case 'DELETE_REPLY_GLOBAL_WORDBOX':
       return state.map(gWB=>{
         if(gWB.id===action.idWBG){

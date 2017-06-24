@@ -243,7 +243,7 @@ Translations</Subheader>
   <div style={{display:'block',marginTop:12,marginBottom:12}}>
     <TextField style={{margin:5, display:'inline-block',width:105}}
     hintText="Tag"
-    multiLine={false}
+    multiLine={false} value={this.state.tagText}
     onChange={(e)=>{
 
       this.setState({tagText:e.target.value});
@@ -262,7 +262,7 @@ Translations</Subheader>
       this.setState({tags:[...prev]});
     }else if(this.state.tagText!==''){
       this.setState({tags:[...prev,{tag:this.state.tagText}]});
-    }
+    }this.setState({tagText:''});
   }}/>
 </div>
 
