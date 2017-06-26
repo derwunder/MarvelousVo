@@ -322,6 +322,26 @@ export var wordBoxesReducer = (state = [], action) => {
 
 export var regularReducer = (state ={}, action) =>{
   switch (action.type) {
+    case 'FRIEND_LIST_CHANGE':
+      return{
+        ...state,
+        friendList:action.friendList
+      };
+    case 'FRIEND_REQUEST':
+      return{
+        ...state,
+        friendReq:action.friendReq
+      };
+    case 'USER_SEARCH':
+      return{
+        ...state,
+        userSearch:action.userLT
+      };
+    case 'USERDATA_DATA_SEARCHABLE':
+      return{
+        ...state,
+        userDataSearchable:!state.userDataSearchable
+      };
     case 'LOGIN_STAT':
       return{
         ...state,

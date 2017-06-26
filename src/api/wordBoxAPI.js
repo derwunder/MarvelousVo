@@ -1,6 +1,18 @@
 import moment from 'moment';
 
 module.exports = {
+  filterFriendList:function(frList,searchText){
+    var filteredFrList =frList;
+    searchText=searchText.toLowerCase();
+
+    filteredFrList =filteredFrList.filter((fr)=>{
+      var frNa = fr.frName.toLowerCase(); //.toLowerCase(); just to non sensitive case
+      var frEm = fr.frEmail.toLowerCase();
+      return searchText.length === 0 || frNa.indexOf(searchText) > -1 ||frEm.indexOf(searchText)>-1 ;
+    });
+
+    return filteredFrList;
+  },
   filterWBGReplys: function(replys){
     var filteredWBGR =replys;
     filteredWBGR.sort(function(a, b) {

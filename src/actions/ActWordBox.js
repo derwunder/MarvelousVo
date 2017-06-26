@@ -215,7 +215,7 @@ export var startDLGWordBoxes = () =>{
 
     return gWordBoxesRef.once('value').then((snapshot)=>{
       var gWordBoxes = snapshot.val() || {};
-
+      console.log(gWordBoxes);
       var parsedGWordBoxes = []; //redux expect to be an Array Object
       //we conver it
       Object.keys(gWordBoxes).forEach((gWordBoxId)=>{
@@ -265,7 +265,63 @@ export var startDLGWordBoxes = () =>{
     });
   };
 };
+export var startDLGWordBoxesSrch = (txSearch) =>{
+  return (dispatch,getState)=>{
+    var txShlo=txSearch.toLowerCase();
+    var gWordBoxesRef = ref.child(`global/wordboxes`).orderByChild('wordbox/boxName').equalTo(txShlo);
 
+    return gWordBoxesRef.once('value').then((snapshot)=>{
+      var gWordBoxes = snapshot.val() || {};
+      console.log(gWordBoxes);
+      var parsedGWordBoxes = []; //redux expect to be an Array Object
+      //we conver it
+      Object.keys(gWordBoxes).forEach((gWordBoxId)=>{
+        if((gWordBoxes[gWordBoxId]).hasOwnProperty('wordbox')){
+        if((gWordBoxes[gWordBoxId]).hasOwnProperty('comments')){
+        var parsedComments = [];
+          Object.keys(gWordBoxes[gWordBoxId]['comments']).forEach(commentId=>{
+            if((gWordBoxes[gWordBoxId]['comments'][commentId]).hasOwnProperty('replys')){
+            var parsedReplys = [];
+              Object.keys(gWordBoxes[gWordBoxId]['comments'][commentId]['replys']).forEach(replyId=>{
+                parsedReplys.push({
+                  id:replyId,
+                  ...gWordBoxes[gWordBoxId]['comments'][commentId]['replys'][replyId]
+                });
+              });
+              parsedComments.push({
+                id:commentId,
+                ...gWordBoxes[gWordBoxId]['comments'][commentId],
+                replys:parsedReplys
+              });
+            }
+            else{
+              parsedComments.push({
+                id:commentId,
+                ...gWordBoxes[gWordBoxId]['comments'][commentId]
+              });
+            }
+          });
+
+          parsedGWordBoxes.push({
+              id: gWordBoxId,
+              ...gWordBoxes[gWordBoxId],
+              comments:parsedComments
+          });
+
+        }
+        else{
+          parsedGWordBoxes.push({
+              id: gWordBoxId,
+              ...gWordBoxes[gWordBoxId]
+          });
+        }
+
+      }
+      });
+        dispatch(setGlobalWordBoxes(parsedGWordBoxes));
+    });
+  };
+};
 /*****DELETE WORD ITEM******/
 export var wordItemDelete = (idWB,idWI)=>{
   return {
@@ -440,7 +496,7 @@ var globalWordBoxPost = (id,gBoard) =>{
       if(gBoard){
         var wordBox =(getState().wordBoxesReducer).find(itm=>itm.id===id);
         var wordBoxChecked={
-          boxName:wordBox.boxName,
+          boxName:(wordBox.boxName).toLowerCase(),
           createdAt:wordBox.createdAt,
           updatedAt:moment().valueOf(),
           createBy:getState().authReducer.uid,

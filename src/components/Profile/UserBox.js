@@ -5,9 +5,9 @@ import {connect} from 'react-redux';
 //import '../css/home.css';
 //import '../css/wordbox.css';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import {FlatButton,RaisedButton,TextField,Avatar,Divider} from 'material-ui';
+import {FlatButton,RaisedButton,TextField,Avatar,Divider,Toggle} from 'material-ui';
 
-import {startImageProfileUP,updateUserDataSer} from '../../actions/ActUserBox';
+import {startImageProfileUP,updateUserDataSer,getUserEnableFReq,userEnableFReq} from '../../actions/ActUserBox';
 
 import Dropzone from 'react-dropzone';
 
@@ -17,14 +17,33 @@ import PasswordChange from './PasswordChange';
 class UserBox extends Component {
   constructor(props) {
    super(props);
-   var {authReducer}=this.props;
    this.state = {
      editor: false,
-     txUsername:''
+     txUsername:'',
+     friendReq:this.props.friendReq
      //oldPhotoURL: authReducer.photoURL,
      //photoChanged:false
    };
 
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.friendReq !== this.props.friendReq   ) {
+      this.setState({friendReq: nextProps.friendReq });
+    }
+  }
+  componentDidMount(){
+  /*  var {dispatch,regularReducer}=this.props;
+    dispatch(getUserEnableFReq());
+    console.log(regularReducer.userDataSearchable);*/
+  }
+  handleFriendReq = ()=>{
+    var {dispatch,authReducer}=this.props;
+    var userDataSearchable={
+      userName:(authReducer.displayName).toLowerCase(),
+      userPhoto:authReducer.photoURL,
+      userEmail:authReducer.email
+    };
+    dispatch(userEnableFReq(userDataSearchable));
   }
   handleSave = () =>{
     var {dispatch}=this.props;
@@ -44,7 +63,7 @@ class UserBox extends Component {
     setTimeout( ()=>{this.setState({editor:!this.state.editor})}, 500);
   };*/
   render() {
-    var {dispatch,authReducer}=this.props;
+    var {dispatch,authReducer,regularReducer}=this.props;
     var wb =this.props.wordBoxesReducer;
 
     var cWords=0, cWoBook=0, cWbG=0,cWbF=0, cWbFav=0;
@@ -81,7 +100,13 @@ class UserBox extends Component {
 
             </div>}
 
-          />
+          >
+            <Toggle labelStyle={{color:'rgba(0, 0, 0, 0.54)',fontSize:14}}
+              label="Friend Request Allowed"
+              defaultToggled={regularReducer.userDataSearchable}
+              onToggle={this.handleFriendReq}
+            />
+          </CardHeader>
           <CardTitle style={{display:this.state.editor?'block':'none',paddingBottom:0}} title="Editor Mode" subtitle="Is Enable" />
           <TextField style={{display:this.state.editor?'block':'none', marginLeft:16,marginBottom:10,width:'60%'}}
             hintText={"Prev: "+authReducer.displayName}

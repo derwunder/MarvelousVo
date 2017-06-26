@@ -46,7 +46,7 @@ class GlobalBoard extends Component {
   render() {
     return (
       <div>
-        <Head title={"Global Board"} section={1}/>
+        <Head title={"Global Board"} section={3}/>
         <Tabs
           onChange={this.handleChange}
           value={this.state.slideIndex}

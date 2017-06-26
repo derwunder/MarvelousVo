@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
 import WordBox from './WordBox';
-import '../../css/wordbox.css';
+//import '../../css/wordbox.css';
 //import RecipeItem from './RecipeItem';
 //import recipeAPI from '../../api/recipeAPI';
 
@@ -12,29 +12,7 @@ class WordBoxListLine extends Component {
   componentWillMount(){
 
   }
-  render() {  /*overlap  es un prop en Badge*/
-
-    //var { searchRecipeReducer}=this.props;
-
-  /*  var renderTodos = () => {
-    return TodoAPI.filterRecipes(todos, showCompleted, searchText).map((todo) =>{
-      return (<Todo key={todo.id} {...todo}/>);
-    });
-  };*/
-
-/*  var recipeItemsLoad = ()=>{
-    return recipeAPI.filterRecipes(recipeBoxReducer,
-      searchRecipeReducer.searchText,
-      searchRecipeReducer.searchCategoria,
-      searchRecipeReducer.searchFavorito).reverse().map((item) =>{
-      return <RecipeItem key={item.id} item={item}/>;
-    });
-  };
-
-    /*var recipeItemsLoad = (item,index)=>{
-        return <RecipeItem key={item.id} item={item}/>;
-    };*/
-
+  render() {
     return (
       <div >
         <Subheader style={{maxWidth: 900,margin: 'auto'}} >
@@ -59,8 +37,6 @@ class WordBoxListLine extends Component {
           </div>
 
 
-        {/*recipeItemsLoad()*/}
-      {/*recipeBoxReducer.map(recipeItemsLoad)*/}
       </div>
     );
   }

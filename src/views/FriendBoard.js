@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 //import '../css/home.css';
-import '../css/wordbox.css';
-import WordBox from '../components/WordBoxes/WordBox';
+//import '../css/wordbox.css';
+//import WordBox from '../components/WordBoxes/WordBox';
 import StackGrid, { transitions } from "react-stack-grid";
 
 const { scaleDown } = transitions;
@@ -52,12 +52,13 @@ class FriendBoard extends Component {
            index={this.state.slideIndex}
            onChangeIndex={this.handleChange}
           >
-           <div>
+           <div style={styles.slide}>
              <h2 style={styles.headline}>Tabs with slide effect</h2>
               Swipe to see the next slide.<br />
            </div>
            <div style={styles.slide}>
-             <WordBox pic={true}/>
+             <h2 style={styles.headline}>Tabs with slide effect</h2>
+              Swipe to see the next slide.<br />
            </div>
           </SwipeableViews>
       </div>

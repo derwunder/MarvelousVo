@@ -4,10 +4,11 @@ import {connect} from 'react-redux';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import {AppBar,
    Toolbar, ToolbarGroup,  ToolbarSeparator, TextField,
-    IconButton} from 'material-ui';
+    IconButton,RaisedButton} from 'material-ui';
 
 
 import {drawerOpen,filterWordBoxesSearch,filterWordItemsBookmark} from '../../actions/Actions';
+import {startDLGWordBoxesSrch,startDLGWordBoxes}from '../../actions/ActWordBox';
 
 import HeadRoom from 'react-headroom';
 //import '../css/home.css';
@@ -52,7 +53,7 @@ class Head extends Component {
           <Toolbar style={{marginTop:'5px',backgroundColor:'transparent',paddingLeft:24,paddingRight:0}}>
             <ToolbarGroup firstChild={true}>
             {/*}<ToolbarSeparator style={{backgroundColor:'#fff'}} />*/}
-            
+
               <IconButton onTouchTap={()=>{ this.setState({open:!this.state.open}); }}
                  style={{width:30,height:30,marginRight:0,padding:0,border:0}}>
                 <i style={{margin:'5px'}} className="material-icons md-light">search</i>
@@ -89,14 +90,26 @@ class Head extends Component {
                 <i style={{margin:'5px'}} className="material-icons md-dark">search</i>
               </IconButton>
 
-              <TextField style={{display:'inline-block', verticalAlign:'top', width:'70%'}}
+              <TextField style={{display:'inline-block', verticalAlign:'top', width:(this.props.section===3)?'50%':'70%'}}
                 hintText="Search" underlineStyle={{borderColor:'#EEEEEE'}} underlineFocusStyle={{borderColor:'#EEEEEE'}}
                 ref={(input) => { this.nameInput = input; }}
                 value={regularReducer.wbSearch}
                 onChange={(e)=>dispatch(filterWordBoxesSearch(e.target.value))}
               />
-              <IconButton  onTouchTap={()=>{this.setState({open:!this.state.open});
-                                            dispatch(filterWordBoxesSearch(''));    }}
+              {(this.props.section===3)&&
+                <RaisedButton style={{display:'inline-block',verticalAlign:'top',marginTop:5,position:'absolute',right:45}}
+                  label="Search"
+                  primary={true}
+                  onTouchTap={()=>{var {dispatch}=this.props;
+                    dispatch(startDLGWordBoxesSrch(regularReducer.wbSearch));
+                  }}
+                />
+              }
+              <IconButton  onTouchTap={()=>{
+                this.setState({open:!this.state.open});
+                dispatch(filterWordBoxesSearch(''));
+                if(this.props.section===3){dispatch(startDLGWordBoxes());}
+               }}
               iconStyle={{marginTop:12}} style={{position:'absolute',right:10,display:'inline-block',width:30,height:30,marginRight:0,padding:0,border:0}}>
                 <i style={{margin:'5px'}} className="material-icons md-dark">cancel</i>
               </IconButton>

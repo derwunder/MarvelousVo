@@ -6,7 +6,8 @@ import {auth} from './firebase/constants';
 import {configureStore} from './store/ConfigStore';
 import {login,logout} from './actions/Actions';
 import {startDLWordBoxes} from './actions/ActWordBox';
-import {hashHistory} from 'react-router';
+import {getUserEnableFReq,friendReqList,friendList} from './actions/ActUserBox';
+import {hashHistory, location} from 'react-router';
 
 import './index.css';
 
@@ -26,7 +27,11 @@ var initialState ={
     wbSortBy:'aZ',
     wbSearch:'',
     wiBookmark:false,
-    loginStat:false
+    loginStat:false,
+    userDataSearchable:false,
+    userSearch:[],
+    friendReq:[],
+    friendList:[]
   }
 };
 var store = configureStore(initialState);
@@ -49,6 +54,11 @@ const muiTheme = getMuiTheme({
 //store.dispatch(login(userData));
  auth.onAuthStateChanged(function(user){
    var auxPhoto="https://firebasestorage.googleapis.com/v0/b/thamcook.appspot.com/o/images%2FScreenshot_20170302-203202.png?alt=media&token=3c589ec6-cab6-43ec-b4b4-38d502d8c079";
+
+   var location=(window.location.href);
+   var indexLoc=location.indexOf('/#/') ;
+   var routeLoc=location.substring(indexLoc);
+
   if(user){
     var userData ={uid:user.uid,
         email:user.email,
@@ -60,10 +70,27 @@ const muiTheme = getMuiTheme({
     //console.log(user);
     store.dispatch(login(userData));
     store.dispatch(startDLWordBoxes());
+    store.dispatch(getUserEnableFReq());
+    store.dispatch(friendReqList());
+    store.dispatch(friendList());
+
+
+    if(routeLoc==='/#/'){
+      console.log('u are about to redirect');
+      hashHistory.replace('/WordBoxes');
+    }
+    else{ console.log('u can stay in that route LGon');}
+
+
     //store.dispatch(startAddTodos());
     //hashHistory.replace('/WordBoxes'); //this should be an action "Edit Mode"
   }else{
     store.dispatch(logout());
+    if(routeLoc!=='/#/'){
+      console.log('u are about to redirect');
+      hashHistory.replace('/');
+    }
+    else{ console.log('u can stay in that route LGoff');}
     //hashHistory.replace('/');  //this should be an action "Exit Edit Mode"
   }
 });

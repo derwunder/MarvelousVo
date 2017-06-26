@@ -6,12 +6,12 @@ import Head from '../components/HeadRoom/Head';
 
 class UserProfile extends Component {
   render() {
-
+    var{regularReducer}=this.props;
     return (<div>
       <Head title={"My Profile"} section={3}/>
-      <UserBox/>
+      <UserBox friendReq={regularReducer.userDataSearchable}/>
     </div>
     );
   }
 }
-export default UserProfile;
+export default connect((state)=>{return state;}) (UserProfile);
