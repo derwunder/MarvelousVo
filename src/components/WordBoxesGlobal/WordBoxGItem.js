@@ -80,7 +80,7 @@ class WordBoxGItem extends Component {
         gWB=gItem.wordbox;
 
         if(gWB.hasOwnProperty('makers')){
-          gWBMakers=gWB.makers; 
+          gWBMakers=gWB.makers;
         }
         if(gItem.hasOwnProperty('downloads')){
           gWBDls=gItem.downloads; if((gItem.downloads).hasOwnProperty(uid)) downloadsStatus=true;
@@ -93,6 +93,7 @@ class WordBoxGItem extends Component {
         }
         if(gWB.hasOwnProperty('words')){
           gWBWords=gWB.words;
+          if(gWBWords===false){gWBWords=[]}
         }
         if(gItem.hasOwnProperty('comments')){
           gWBComments=gItem.comments;

@@ -33,7 +33,7 @@ class WordBoxGlobal extends Component {
 
 
   render() {
-    var {dispatch}=this.props;
+    var {dispatch,regularReducer}=this.props;
     //moment(tm).format("MMM Do YYYY")   format readable
     //var lastCheckSTR =moment(this.props.item.createdAt).from(moment());
     //var lastCheck =moment().diff(this.props.item.lastCheckedAt,"days");
@@ -58,7 +58,7 @@ class WordBoxGlobal extends Component {
           </Link>
 
           <div style={{marginLeft:5,marginRight:10}}>
-            <p style={{color:'rgba(0, 0, 0, 0.7)',width:90, margin:5,fontSize:14,display:'inline-block'}}>
+            <p style={{overflowX:'hidden',textOverflow:'ellipsis',color:'rgba(0, 0, 0, 0.7)',width:90, margin:5,fontSize:14,display:'inline-block'}}>
                <strong>{this.props.item.creatorName}</strong></p>
                <Avatar src={this.props.item.creatorAvatar} size={30}/>
           </div>
@@ -71,19 +71,39 @@ class WordBoxGlobal extends Component {
           </div>
 
           <div style={{marginLeft:5,marginRight:10}}>
-              <p style={{color:'rgba(0, 0, 0, 0.7)',width:95, margin:5,fontSize:13,display:'inline-block',verticalAlign:'top'}}>
+              <p style={{color:regularReducer.wbgSortBy==='downloadsCount'?
+                'rgba(0, 137, 123, 1)':
+                'rgba(0, 0, 0, 0.7)',width:95, margin:5,fontSize:13,display:'inline-block',verticalAlign:'top'}}>
                 {this.props.downloads} Downloads
               </p>
               <i style={{display:'inline-block'}}
-                 className={"material-icons md-18 md-dark"} aria-hidden="true">file_download</i>
+                 className={regularReducer.wbgSortBy==='downloadsCount'?
+                 "material-icons md-18 md-dark md-active":
+                 "material-icons md-18 md-dark"} aria-hidden="true">file_download</i>
+          </div>
+
+          <div style={{marginLeft:5,marginRight:10}}>
+              <p style={{color:regularReducer.wbgSortBy==='likeCount'?
+                'rgba(0, 137, 123, 1)':
+                'rgba(0, 0, 0, 0.7)',width:95, margin:5,fontSize:13,display:'inline-block',verticalAlign:'top'}}>
+                {this.props.likes} Likes
+              </p>
+              <i style={{display:'inline-block'}}
+                 className={regularReducer.wbgSortBy==='likeCount'?
+                 "material-icons md-18 md-dark md-active":
+                 "material-icons md-18 md-dark"} aria-hidden="true">thumb_up</i>
           </div>
 
           <div style={{marginLeft:5,marginRight:10, paddingBottom:15}}>
-              <p style={{color:'rgba(0, 0, 0, 0.7)',width:95, margin:5,fontSize:13,display:'inline-block',verticalAlign:'top'}}>
-                {moment(this.props.item.updatedAt).fromNow()}
+              <p style={{color:regularReducer.wbgSortBy==='wordbox/updatedAt'?
+                'rgba(0, 137, 123, 1)':
+                'rgba(0, 0, 0, 0.7)',width:95, margin:5,fontSize:13,display:'inline-block',verticalAlign:'top'}}>
+                {moment(((this.props.item.updatedAt))).fromNow()}
               </p>
               <i style={{display:'inline-block'}}
-                 className={"material-icons md-18 md-dark"} aria-hidden="true">update</i>
+                 className={regularReducer.wbgSortBy==='wordbox/updatedAt'?
+                 "material-icons md-18 md-dark md-active":
+                 "material-icons md-18 md-dark"} aria-hidden="true">update</i>
           </div>
 
 

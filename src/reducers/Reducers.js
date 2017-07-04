@@ -322,6 +322,16 @@ export var wordBoxesReducer = (state = [], action) => {
 
 export var regularReducer = (state ={}, action) =>{
   switch (action.type) {
+    case'GLOBAL_WAIT':
+      return{
+        ...state,
+        w8Global:!state.w8Global
+      }
+    case 'SORT_GLOBAL_WORDBOXES_BY':
+      return{
+        ...state,
+        wbgSortBy:action.wbgSortBy
+      }
     case 'FRIEND_LIST_CHANGE':
       return{
         ...state,

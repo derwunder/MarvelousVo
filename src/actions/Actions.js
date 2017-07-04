@@ -2,6 +2,15 @@ import {auth, github,google} from '../firebase/constants';
 //import firebase here to handle async task
 
 
+/********* SORT GLOBAL WORD BOXES*****************/
+export var sortGWordBoxesBy = (wbgSortBy)=>{
+  return {
+    type:'SORT_GLOBAL_WORDBOXES_BY',
+    wbgSortBy
+  }
+};
+
+/********* FILTER & SORT - LOCAL WORD BOXES*****/
 export var filterWordItemsBookmark = ()=>{
   return {
     type:'FILTER_WORDITEMS_BOOKMARK'
@@ -40,7 +49,7 @@ export var drawerOpen = ()=>{
     type:'DRAWER_OPEN'
   }
 };
-
+/*************SIGN IN/UP APP***************/
 export var login = (userData)=>{
   return{
     type:'LOGIN',
@@ -53,7 +62,7 @@ export var loginStat =(loginStat)=>{
       loginStat
   };
 };
-
+           //WITH SOCIAL
 export var startLoginGoogle = ()=>{
   return (dispatch, getState)=>{
       return auth.signInWithPopup(google)
@@ -82,8 +91,7 @@ export var startLoginGitHub = ()=>{
       );
     };
 };
-
-
+          //WITH EMAIL
 export var startLoginEmail = (email, password)=>{
   return (dispatch, getState)=>{
       return auth.signInWithEmailAndPassword(email, password)
@@ -117,8 +125,7 @@ export var createAccount = (email, password)=>{
     };
 };
 
-/*
-export var startLoginFace = ()=>{
+/*export var startLoginFace = ()=>{
   return (dispatch, getState)=>{
       return firebase.auth().signInWithPopup(faceBookProvider)
         .then(
@@ -133,12 +140,12 @@ export var startLoginFace = ()=>{
     };
 };*/
 
+/**************LOGOUT APP*******************/
 export var logout = ()=>{
   return{
     type:'LOGOUT',
   };
 };
-
 export var logoutFB = ()=>{
   return (dispatch,getState)=>{
    return  auth.signOut().then(function() {
@@ -148,13 +155,3 @@ export var logoutFB = ()=>{
     });
   };
 };
-
-/*export var startLogout = ()=>{
-  return (dispatch, getState)=>{
-    return firebase.auth().signOut().then(
-      ()=> {
-        console.log('Logout Worked: ');
-      }
-    );
-  };
-};*/

@@ -219,13 +219,14 @@ export var userEnableFReq=(userDataSearchableItem)=>{
 export var getUserEnableFReq=()=>{
   return (dispatch,getState)=>{
 
+    const enpass=getState().regularReducer.userDataSearchable;
     var fSearchRef = ref.child(`fsearch/users/${getState().authReducer.uid}`);
 
     return fSearchRef.once('value').then((snapshot)=>{
       var fsearch = snapshot.val() || {};
     //  console.log(fsearch);
 
-      if(fsearch.hasOwnProperty('userEmail')){
+      if(fsearch.hasOwnProperty('userEmail') && !enpass){
         dispatch(userDataSearchable());
       }
 

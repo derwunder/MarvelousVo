@@ -19,6 +19,7 @@ import MenuItem from 'material-ui/MenuItem';
 
 import FilterWB from './FilterWB';
 import SortWB from './SortWB';
+import SortWBG from './SortWBG';
 
 
 class Head extends Component {
@@ -69,6 +70,7 @@ class Head extends Component {
                   }</i>
                 </IconButton>
               }
+              {(this.props.section===3)&& <SortWBG/>}
 
 
 

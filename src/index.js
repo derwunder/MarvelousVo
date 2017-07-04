@@ -26,6 +26,7 @@ var initialState ={
     wbFBoard:false,
     wbSortBy:'aZ',
     wbSearch:'',
+    wbgSortBy:'wordbox/boxName',
     wiBookmark:false,
     loginStat:false,
     userDataSearchable:false,

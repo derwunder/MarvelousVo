@@ -81,14 +81,14 @@ module.exports = {
         return id===uid;  //uid.length === 0 || id.indexOf(uid) > -1 ;
       });
     }
-    filteredWordBoxesG.sort(function(a, b) {
+  /*  filteredWordBoxesG.sort(function(a, b) {
       var termA = a.wordbox.boxName.toUpperCase();   //.toUpperCase(); // ignore upper and lowercase
       var termB = b.wordbox.boxName.toUpperCase();  //.toUpperCase(); // ignore upper and lowercase
       if (termA < termB) {  return -1;  }
       if (termA > termB) {  return 1;   }
       // names must be equal
       return 0;
-    });
+    });*/
     return filteredWordBoxesG;
   },
   filterWordBoxes: function(wordBoxes, type, favorite, fBoard, gBoard,searchText ,wbSortBy){

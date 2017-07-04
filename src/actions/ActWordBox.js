@@ -108,16 +108,23 @@ export var startDLGWordBox =(idWBG,newItemCloud,newItemLocal)=>{
         ...newItemLocal
       }));
       var uid= getState().authReducer.uid;
-      var gWB={};
+      var gWB={}, dLCount=0, dLStatus=false;
       var gWB =getState().gWordBoxesReducer.find(wb=>wb.id===idWBG);
       if(gWB.hasOwnProperty('downloads')){
-        if((gWB.downloads).hasOwnProperty(uid));
+        dLCount=Object.keys(gWB.downloads).length;
+        if((gWB.downloads).hasOwnProperty(uid)) dLStatus=true;
       }
       var itemLocal= {}; itemLocal[uid]=true;
 
-      var gWordBoxLikeRef = ref.child(`global/wordboxes/${idWBG}/downloads`);
+      var gWordBoxLikeRef = ref.child(`global/wordboxes/${idWBG}`);
       var mergedUpdate = {};
-      mergedUpdate[uid] =  true;
+      mergedUpdate["downloads/"+uid] =  true;
+      if(dLStatus){
+        mergedUpdate["downloadsCount"]=-1*(dLCount);
+      }
+      else{
+        mergedUpdate["downloadsCount"]=-1*(dLCount+1);
+      }
       gWordBoxLikeRef.update(mergedUpdate).then(()=>{
         dispatch(dlGWordBox(idWBG,uid,itemLocal))
       });
@@ -154,13 +161,15 @@ export var startLikeWordBox =(idWBG,type)=>{
     var uid= getState().authReducer.uid;
     var likeStatus=false, dislikeStatus=false;
 
-    var gWB={};
+    var gWB={},likeCount=0,dislikeCount=0;
     var gWB =getState().gWordBoxesReducer.find(wb=>wb.id===idWBG);
 
     if(gWB.hasOwnProperty('like')){
+      likeCount = Object.keys(gWB.like).length;
       if((gWB.like).hasOwnProperty(uid)) likeStatus=true;
     }
     if(gWB.hasOwnProperty('dislike')){
+      dislikeCount = Object.keys(gWB.dislike).length;
       if((gWB.dislike).hasOwnProperty(uid)) dislikeStatus=true;
     }
 
@@ -170,6 +179,15 @@ export var startLikeWordBox =(idWBG,type)=>{
       var mergedUpdate = {};
       mergedUpdate["like/"+uid] = likeStatus? null: true;
       mergedUpdate["dislike/"+uid] = null;
+      if(likeStatus){
+        mergedUpdate["likeCount"]=-1*(likeCount-1);
+      }
+      else{
+        mergedUpdate["likeCount"]=-1*(likeCount+1);
+        dislikeStatus?
+          mergedUpdate["dislikeCount"]=-1*(dislikeCount-1):
+          mergedUpdate["dislikeCount"]=-1*dislikeCount;
+      }
       var itemLocal= {}; itemLocal[uid]=true;
 
     return  gWordBoxLikeRef.update(mergedUpdate).then(()=>{
@@ -183,6 +201,15 @@ export var startLikeWordBox =(idWBG,type)=>{
       var mergedUpdate = {};
       mergedUpdate["like/"+uid] = null;
       mergedUpdate["dislike/"+uid] = dislikeStatus? null: true;
+      if(dislikeStatus){
+        mergedUpdate["dislikeCount"]=-1*(dislikeCount-1);
+      }
+      else{
+        mergedUpdate["dislikeCount"]=-1*(dislikeCount+1);
+        likeStatus?
+          mergedUpdate["likeCount"]=-1*(likeCount-1):
+          mergedUpdate["likeCount"]=-1*likeCount;
+      }
       var itemLocal= {}; itemLocal[uid]=true;
 
       return gWordBoxLikeRef.update(mergedUpdate).then(()=>{
@@ -203,6 +230,12 @@ export var startLikeWordBox =(idWBG,type)=>{
 };
 
 /******** GLOBAL DL WORD BOXES ******/
+          ///WAITING DIALOGS
+export var globalW8Dialog = () =>{
+  return {
+    type:'GLOBAL_WAIT'
+  }
+};
 export var setGlobalWordBoxes = (gWordBoxes)=>{
   return{
     type:'SET_GLOBAL_WORDBOXES',
@@ -211,13 +244,71 @@ export var setGlobalWordBoxes = (gWordBoxes)=>{
 };
 export var startDLGWordBoxes = () =>{
   return (dispatch,getState)=>{
-    var gWordBoxesRef = ref.child(`global/wordboxes`);
+
+    dispatch(globalW8Dialog());
+    var sortWBG =getState().regularReducer.wbgSortBy;
+    var gWordBoxesRef = ref.child(`global/wordboxes`).orderByChild(sortWBG);
 
     return gWordBoxesRef.once('value').then((snapshot)=>{
       var gWordBoxes = snapshot.val() || {};
-      console.log(gWordBoxes);
+
+      //console.log(gWordBoxes);
       var parsedGWordBoxes = []; //redux expect to be an Array Object
       //we conver it
+
+    /*  snapshot.forEach((inSnap) => {
+           const gWB = inSnap.val()
+           console.log(inSnap);
+           console.log(inSnap.key);
+           console.log(gWB);
+       });*/
+
+   snapshot.forEach((inSnap) => {
+     var gWB = inSnap.val();
+
+
+     if(gWB.hasOwnProperty('wordbox')){
+       gWB.wordbox.updatedAt= (-1* (gWB.wordbox.updatedAt)); //FB trick to order data Descending way
+     if(gWB.hasOwnProperty('comments')){
+     var parsedComments = [];
+     Object.keys(gWB.comments).forEach(commentId=>{
+       if((gWB['comments'][commentId]).hasOwnProperty('replys')){
+       var parsedReplys = [];
+       Object.keys(gWB['comments'][commentId]['replys']).forEach(replyId=>{
+         parsedReplys.push({
+           id:replyId,
+           ...gWB['comments'][commentId]['replys'][replyId]
+         });
+       });
+         parsedComments.push({
+           id:commentId,
+           ...gWB['comments'][commentId],
+           replys:parsedReplys
+         });
+       }
+       else{
+         parsedComments.push({
+           id:commentId,
+           ...gWB['comments'][commentId]
+         });
+       }
+     });
+     parsedGWordBoxes.push({
+         id: inSnap.key,
+         ...gWB,
+         comments:parsedComments
+     });
+   }
+   else{
+     parsedGWordBoxes.push({
+         id: inSnap.key,
+         ...gWB
+     });
+   }
+ }
+   });
+
+  /*
       Object.keys(gWordBoxes).forEach((gWordBoxId)=>{
         if((gWordBoxes[gWordBoxId]).hasOwnProperty('wordbox')){
         if((gWordBoxes[gWordBoxId]).hasOwnProperty('comments')){
@@ -260,13 +351,18 @@ export var startDLGWordBoxes = () =>{
         }
 
       }
-      });
+    }); */
+
+
         dispatch(setGlobalWordBoxes(parsedGWordBoxes));
+        setTimeout( ()=>{dispatch(globalW8Dialog());}, 2000);
+
     });
   };
 };
 export var startDLGWordBoxesSrch = (txSearch) =>{
   return (dispatch,getState)=>{
+    dispatch(globalW8Dialog());
     var txShlo=txSearch.toLowerCase();
     var gWordBoxesRef = ref.child(`global/wordboxes`).orderByChild('wordbox/boxName').equalTo(txShlo);
 
@@ -274,51 +370,110 @@ export var startDLGWordBoxesSrch = (txSearch) =>{
       var gWordBoxes = snapshot.val() || {};
       console.log(gWordBoxes);
       var parsedGWordBoxes = []; //redux expect to be an Array Object
-      //we conver it
-      Object.keys(gWordBoxes).forEach((gWordBoxId)=>{
-        if((gWordBoxes[gWordBoxId]).hasOwnProperty('wordbox')){
-        if((gWordBoxes[gWordBoxId]).hasOwnProperty('comments')){
+      snapshot.forEach((inSnap) => {
+        var gWB = inSnap.val();
+
+
+        if(gWB.hasOwnProperty('wordbox')){
+          gWB.wordbox.updatedAt= (-1* (gWB.wordbox.updatedAt)); //FB trick to order data Descending way
+        if(gWB.hasOwnProperty('comments')){
         var parsedComments = [];
-          Object.keys(gWordBoxes[gWordBoxId]['comments']).forEach(commentId=>{
-            if((gWordBoxes[gWordBoxId]['comments'][commentId]).hasOwnProperty('replys')){
-            var parsedReplys = [];
-              Object.keys(gWordBoxes[gWordBoxId]['comments'][commentId]['replys']).forEach(replyId=>{
-                parsedReplys.push({
-                  id:replyId,
-                  ...gWordBoxes[gWordBoxId]['comments'][commentId]['replys'][replyId]
-                });
-              });
-              parsedComments.push({
-                id:commentId,
-                ...gWordBoxes[gWordBoxId]['comments'][commentId],
-                replys:parsedReplys
-              });
-            }
-            else{
-              parsedComments.push({
-                id:commentId,
-                ...gWordBoxes[gWordBoxId]['comments'][commentId]
-              });
-            }
+        Object.keys(gWB.comments).forEach(commentId=>{
+          if((gWB['comments'][commentId]).hasOwnProperty('replys')){
+          var parsedReplys = [];
+          Object.keys(gWB['comments'][commentId]['replys']).forEach(replyId=>{
+            parsedReplys.push({
+              id:replyId,
+              ...gWB['comments'][commentId]['replys'][replyId]
+            });
           });
-
-          parsedGWordBoxes.push({
-              id: gWordBoxId,
-              ...gWordBoxes[gWordBoxId],
-              comments:parsedComments
-          });
-
-        }
-        else{
-          parsedGWordBoxes.push({
-              id: gWordBoxId,
-              ...gWordBoxes[gWordBoxId]
-          });
-        }
-
+            parsedComments.push({
+              id:commentId,
+              ...gWB['comments'][commentId],
+              replys:parsedReplys
+            });
+          }
+          else{
+            parsedComments.push({
+              id:commentId,
+              ...gWB['comments'][commentId]
+            });
+          }
+        });
+        parsedGWordBoxes.push({
+            id: inSnap.key,
+            ...gWB,
+            comments:parsedComments
+        });
       }
+      else{
+        parsedGWordBoxes.push({
+            id: inSnap.key,
+            ...gWB
+        });
+      }
+    }
       });
         dispatch(setGlobalWordBoxes(parsedGWordBoxes));
+        setTimeout( ()=>{dispatch(globalW8Dialog());}, 2000);
+    });
+  };
+};
+export var startDLGWordBoxesByUser = (userSH) =>{
+  return (dispatch,getState)=>{
+    dispatch(globalW8Dialog());
+    var gWordBoxesRef = ref.child(`global/wordboxes`).orderByChild('wordbox/createBy').equalTo(userSH);
+
+    return gWordBoxesRef.once('value').then((snapshot)=>{
+      var gWordBoxes = snapshot.val() || {};
+      console.log(gWordBoxes);
+      var parsedGWordBoxes = []; //redux expect to be an Array Object
+      snapshot.forEach((inSnap) => {
+        var gWB = inSnap.val();
+
+
+        if(gWB.hasOwnProperty('wordbox')){
+          gWB.wordbox.updatedAt= (-1* (gWB.wordbox.updatedAt)); //FB trick to order data Descending way
+        if(gWB.hasOwnProperty('comments')){
+        var parsedComments = [];
+        Object.keys(gWB.comments).forEach(commentId=>{
+          if((gWB['comments'][commentId]).hasOwnProperty('replys')){
+          var parsedReplys = [];
+          Object.keys(gWB['comments'][commentId]['replys']).forEach(replyId=>{
+            parsedReplys.push({
+              id:replyId,
+              ...gWB['comments'][commentId]['replys'][replyId]
+            });
+          });
+            parsedComments.push({
+              id:commentId,
+              ...gWB['comments'][commentId],
+              replys:parsedReplys
+            });
+          }
+          else{
+            parsedComments.push({
+              id:commentId,
+              ...gWB['comments'][commentId]
+            });
+          }
+        });
+        parsedGWordBoxes.push({
+            id: inSnap.key,
+            ...gWB,
+            comments:parsedComments
+        });
+      }
+      else{
+        parsedGWordBoxes.push({
+            id: inSnap.key,
+            ...gWB
+        });
+      }
+    }
+      });
+        dispatch(setGlobalWordBoxes(parsedGWordBoxes));
+        setTimeout( ()=>{dispatch(globalW8Dialog());}, 2000);
     });
   };
 };
@@ -370,7 +525,7 @@ var globalWordBoxWords = (id) =>{
 
       if(wordBox.hasOwnProperty('gBoard')){
         if(wordBox.gBoard){
-          var timeUp=moment().valueOf();
+          var timeUp=-1*(moment().valueOf()); //FB Trick to ORDER Descending
           if(words.length>0){
 
             var gWordBoxWordsRef = ref.child(`global/wordboxes/${id}/wordbox`)
@@ -498,7 +653,7 @@ var globalWordBoxPost = (id,gBoard) =>{
         var wordBoxChecked={
           boxName:(wordBox.boxName).toLowerCase(),
           createdAt:wordBox.createdAt,
-          updatedAt:moment().valueOf(),
+          updatedAt:-1*(moment().valueOf()),  //FB Trick to Order by Descending
           createBy:getState().authReducer.uid,
           creatorName:getState().authReducer.displayName,
           creatorAvatar:getState().authReducer.photoURL,
@@ -506,6 +661,7 @@ var globalWordBoxPost = (id,gBoard) =>{
           makers:wordBox.hasOwnProperty('makers')?wordBox.makers :[]
         };
         var gWordBoxRef = ref.child(`global/wordboxes/${id}/wordbox`).set(wordBoxChecked);
+
       }
       else
         var gWordBoxRef = ref.child(`global/wordboxes/${id}/wordbox`).remove();

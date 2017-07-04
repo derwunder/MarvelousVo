@@ -139,7 +139,7 @@ class SignUp extends Component {
       onChange={(e)=>{ this.setState({emailRePass: e.target.value});}} />
     </Dialog>
 
-  <Snackbar style={{position:'fixed',bottom:20 }}
+  <Snackbar style={{position:'fixed',bottom:0 }}
       open={(!regularReducer.loginStat && this.state.loginStatActive)}
       message={"SignIn Fail"}
       action="close"

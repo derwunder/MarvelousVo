@@ -47,26 +47,9 @@ class GlobalBoard extends Component {
     return (
       <div>
         <Head title={"Global Board"} section={3}/>
-        <Tabs
-          onChange={this.handleChange}
-          value={this.state.slideIndex}
-          >
-          <Tab label="World Boxes" value={0} />
-          <Tab label="My Posts" value={1} />
-          </Tabs>
-          <SwipeableViews
-           index={this.state.slideIndex}
-           onChangeIndex={this.handleChange}
-          >
-           <div>
-
+      
               <WordBoxListGlobal type={1}/>
 
-           </div>
-           <div>
-            <WordBoxListGlobal type={2}/>
-           </div>
-          </SwipeableViews>
       </div>
     );
   }
