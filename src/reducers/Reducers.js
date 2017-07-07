@@ -204,6 +204,21 @@ export var gWordBoxesReducer = (state=[],action) =>{
           return wb;
         }
       });
+    case 'ADD_MORE_GLOBAL_WORDBOXES':
+      return[
+        ...state,
+        ...action.gWordBoxes
+      ];
+    case 'ADD_MORE_FGLOBAL_WORDBOXES':
+      if(action.inx>0)
+        return[
+          ...state,
+          ...action.gWordBoxes
+        ];
+      else
+        return[
+          ...action.gWordBoxes
+        ];
     case 'SET_GLOBAL_WORDBOXES':
       return [
         ...action.gWordBoxes
@@ -322,6 +337,16 @@ export var wordBoxesReducer = (state = [], action) => {
 
 export var regularReducer = (state ={}, action) =>{
   switch (action.type) {
+    case 'GLOBAL_ITEMS_NUM':
+      return{
+        ...state,
+        numIGlobal:action.numIGlobal
+      }
+    case 'GLOBAL_MORE_WAIT':
+      return{
+        ...state,
+        w8GlobalMore:!state.w8GlobalMore
+      }
     case'GLOBAL_WAIT':
       return{
         ...state,

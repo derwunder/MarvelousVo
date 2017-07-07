@@ -72,15 +72,41 @@ module.exports = {
     });
     return filteredWordsG;
   },
-  filterWordBoxesGlobal: function (wordBoxesG, tp, uid){
+  filterWordBoxesGlobal: function (wordBoxesG, tp,wbSortBy, wbSearch){
     var filteredWordBoxesG =wordBoxesG;
+    wbSearch=wbSearch.toLowerCase();
 
-    if(tp===2){
-      filteredWordBoxesG =filteredWordBoxesG.filter((wb)=>{
-        var id= wb.wordbox.createBy;
-        return id===uid;  //uid.length === 0 || id.indexOf(uid) > -1 ;
+
+    if(tp===3 || tp===2){
+      filteredWordBoxesG =filteredWordBoxesG.filter((fWBG)=>{
+        var fWBGNm = fWBG.wordbox.boxName.toLowerCase(); //.toLowerCase(); just to non sensitive case
+        var fWBGCm = fWBG.wordbox.creatorName.toLowerCase();
+        return wbSearch.length === 0 || fWBGNm.indexOf(wbSearch) > -1 ||fWBGCm.indexOf(wbSearch)>-1 ;
       });
     }
+    if(tp===2){
+      if(wbSortBy==='aZ'){
+        filteredWordBoxesG.sort(function(a, b) {
+            var termA = a.wordbox.boxName.toUpperCase();   //.toUpperCase(); // ignore upper and lowercase
+            var termB = b.wordbox.boxName.toUpperCase();  //.toUpperCase(); // ignore upper and lowercase
+            if (termA < termB) {  return -1;  }
+            if (termA > termB) {  return 1;   }
+            // names must be equal
+            return 0;
+          });
+      }
+      else if(wbSortBy==='fL'){
+        filteredWordBoxesG.sort(function(a, b) {
+            var termA = a.wordbox.creatorName.toUpperCase();   //.toUpperCase(); // ignore upper and lowercase
+            var termB = b.wordbox.creatorName.toUpperCase();  //.toUpperCase(); // ignore upper and lowercase
+            if (termA < termB) {  return -1;  }
+            if (termA > termB) {  return 1;   }
+            // names must be equal
+            return 0;
+          });
+      }
+    }
+
   /*  filteredWordBoxesG.sort(function(a, b) {
       var termA = a.wordbox.boxName.toUpperCase();   //.toUpperCase(); // ignore upper and lowercase
       var termB = b.wordbox.boxName.toUpperCase();  //.toUpperCase(); // ignore upper and lowercase

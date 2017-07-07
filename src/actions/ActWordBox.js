@@ -229,11 +229,101 @@ export var startLikeWordBox =(idWBG,type)=>{
   };
 };
 
+/******** FRIEND BOAD DL WORD BOXES *****/
+export var addMoreFGlobalWordBoxes=(gWordBoxes,inx)=>{
+  return {
+    type:'ADD_MORE_FGLOBAL_WORDBOXES',
+    gWordBoxes,
+    inx
+  }
+}
+export var startDLFBWordBoxes = () =>{
+  return (dispatch,getState)=>{
+
+    //dispatch(globalW8Dialog());
+    var fList =getState().regularReducer.friendList;
+  //  dispatch(setGlobalWordBoxes([]));
+  //  var numIGlobal=getState().regularReducer.numIGlobal;
+
+
+      fList.forEach((fItem,inx)=>{
+        console.log(fItem.id);
+        var parsedGWordBoxes = [];
+        var gWordBoxesRef = ref.child(`global/wordboxes`).orderByChild('wordbox/createBy')
+              .equalTo(fItem.id);
+         gWordBoxesRef.once('value').then((snapshot)=>{
+           //redux expect to be an Array Object
+          snapshot.forEach((inSnap) => {
+           var gWB = inSnap.val();
+             if(gWB.hasOwnProperty('wordbox')){
+               gWB.wordbox.updatedAt= (-1* (gWB.wordbox.updatedAt)); //FB trick to order data Descending way
+             if(gWB.hasOwnProperty('comments')){
+               var parsedComments = [];
+               Object.keys(gWB.comments).forEach(commentId=>{
+                 if((gWB['comments'][commentId]).hasOwnProperty('replys')){
+                   var parsedReplys = [];
+                   Object.keys(gWB['comments'][commentId]['replys']).forEach(replyId=>{
+                     parsedReplys.push({
+                       id:replyId,
+                       ...gWB['comments'][commentId]['replys'][replyId]
+                     });
+                   });
+                     parsedComments.push({
+                       id:commentId,
+                       ...gWB['comments'][commentId],
+                       replys:parsedReplys
+                     });
+                  }
+                  else{
+                     parsedComments.push({
+                       id:commentId,
+                       ...gWB['comments'][commentId]
+                     });
+                   }
+                 });
+                 parsedGWordBoxes.push({
+                     id: inSnap.key,
+                     ...gWB,
+                     comments:parsedComments
+                 });
+               }
+               else{
+                 parsedGWordBoxes.push({
+                     id: inSnap.key,
+                     ...gWB
+                 });
+               }
+             }
+            });
+            dispatch(addMoreFGlobalWordBoxes(parsedGWordBoxes,inx));
+            //setTimeout( ()=>{dispatch(globalW8Dialog());}, 2000);
+        });
+
+      });
+//      dispatch(setGlobalWordBoxes(parsedGWordBoxes));
+
+
+  };
+};
+
+
 /******** GLOBAL DL WORD BOXES ******/
           ///WAITING DIALOGS
 export var globalW8Dialog = () =>{
   return {
     type:'GLOBAL_WAIT'
+  }
+};
+export var globalW8MoreDialog = () =>{
+  return {
+    type:'GLOBAL_MORE_WAIT'
+  }
+};
+          ///GLOBAL ITEMS NUMBER
+export var globalItemsNumber=(numIGlobal)=>{
+  return{
+    type:'GLOBAL_ITEMS_NUM',
+    numIGlobal
   }
 };
 export var setGlobalWordBoxes = (gWordBoxes)=>{
@@ -242,12 +332,22 @@ export var setGlobalWordBoxes = (gWordBoxes)=>{
     gWordBoxes
   };
 };
+export var addMoreGlobalWordBoxes=(gWordBoxes)=>{
+  return {
+    type:'ADD_MORE_GLOBAL_WORDBOXES',
+    gWordBoxes
+  }
+}
 export var startDLGWordBoxes = () =>{
   return (dispatch,getState)=>{
 
     dispatch(globalW8Dialog());
     var sortWBG =getState().regularReducer.wbgSortBy;
-    var gWordBoxesRef = ref.child(`global/wordboxes`).orderByChild(sortWBG);
+  //  var numIGlobal=getState().regularReducer.numIGlobal;
+    var gWordBoxesRef = ref.child(`global/wordboxes`)
+          .orderByChild(sortWBG)
+          .limitToFirst(4)
+          ;
 
     return gWordBoxesRef.once('value').then((snapshot)=>{
       var gWordBoxes = snapshot.val() || {};
@@ -356,6 +456,92 @@ export var startDLGWordBoxes = () =>{
 
         dispatch(setGlobalWordBoxes(parsedGWordBoxes));
         setTimeout( ()=>{dispatch(globalW8Dialog());}, 2000);
+
+    });
+  };
+};
+export var startDLGWordBoxesScroll = (lastBN,lastKey) =>{
+  return (dispatch,getState)=>{
+
+    if(getState().regularReducer.wbgSortBy!=='wordbox/boxName')
+    lastBN=-1*lastBN;
+
+    dispatch(globalW8MoreDialog());
+    var sortWBG =getState().regularReducer.wbgSortBy;
+  //  var numIGlobal=getState().regularReducer.numIGlobal;
+    var gWordBoxesRef = ref.child(`global/wordboxes`)
+          .orderByChild(sortWBG)
+          .startAt(lastBN,lastKey)
+          .limitToFirst(4)
+          ;
+
+    return gWordBoxesRef.once('value').then((snapshot)=>{
+      var gWordBoxes = snapshot.val() || {};
+
+      //console.log(gWordBoxes);
+      var parsedGWordBoxes = []; //redux expect to be an Array Object
+      //we conver it
+
+    /*  snapshot.forEach((inSnap) => {
+           const gWB = inSnap.val()
+           console.log(inSnap);
+           console.log(inSnap.key);
+           console.log(gWB);
+       });*/
+
+   snapshot.forEach((inSnap) => {
+     var gWB = inSnap.val();
+
+     if(inSnap.key!==lastKey){
+     if(gWB.hasOwnProperty('wordbox')){
+       gWB.wordbox.updatedAt= (-1* (gWB.wordbox.updatedAt)); //FB trick to order data Descending way
+     if(gWB.hasOwnProperty('comments')){
+     var parsedComments = [];
+     Object.keys(gWB.comments).forEach(commentId=>{
+       if((gWB['comments'][commentId]).hasOwnProperty('replys')){
+       var parsedReplys = [];
+       Object.keys(gWB['comments'][commentId]['replys']).forEach(replyId=>{
+         parsedReplys.push({
+           id:replyId,
+           ...gWB['comments'][commentId]['replys'][replyId]
+         });
+       });
+         parsedComments.push({
+           id:commentId,
+           ...gWB['comments'][commentId],
+           replys:parsedReplys
+         });
+       }
+       else{
+         parsedComments.push({
+           id:commentId,
+           ...gWB['comments'][commentId]
+         });
+       }
+     });
+     parsedGWordBoxes.push({
+         id: inSnap.key,
+         ...gWB,
+         comments:parsedComments
+     });
+   }
+   else{
+     parsedGWordBoxes.push({
+         id: inSnap.key,
+         ...gWB
+     });
+   }
+ }}
+   });
+
+
+
+        dispatch(addMoreGlobalWordBoxes(parsedGWordBoxes));
+        setTimeout( ()=>{dispatch(globalW8MoreDialog());}, 2000);
+
+        var endPass=false;
+        if(parsedGWordBoxes.length<4) endPass=true;
+        setTimeout(()=>{dispatch(globalItemsNumber(endPass));},1000);
 
     });
   };

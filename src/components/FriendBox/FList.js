@@ -8,6 +8,7 @@ import Avatar from 'material-ui/Avatar';
 import {pinkA200, teal400,transparent} from 'material-ui/styles/colors';
 
 import wordBoxAPI from '../../api/wordBoxAPI';
+import {Link} from 'react-router';
 
 //import FAdd from './FAdd';
 
@@ -21,7 +22,9 @@ class FList extends Component {
     var mapFriends=(frList)=>{
       return wordBoxAPI.filterFriendList(frList,searchTx).map((fr,inx)=>{
         return(
-          <ListItem key={inx+fr.id}
+            <Link key={inx+fr.id} style={{textDecoration:'none'}}
+               to={"/FriendBoard/"+fr.id} >
+          <ListItem
             leftAvatar={<Avatar src={fr.frPhoto} />}
             primaryText={fr.frName}
             secondaryText= {<span style={{color:teal400}}>{fr.frEmail}</span>}
@@ -29,6 +32,7 @@ class FList extends Component {
             insetChildren={true}
 
           />
+        </Link>
         );
       });
     };

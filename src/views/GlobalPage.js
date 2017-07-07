@@ -7,6 +7,7 @@ import WordBox from '../components/WordBoxes/WordBox';
 
 import Head from '../components/HeadRoom/Head';
 
+import {sortGWordBoxesBy} from '../actions/Actions';
 import {startDLGWordBoxes} from '../actions/ActWordBox';
 import DrawerCO from '../components/Drawer/DrawerCO';
 
@@ -28,7 +29,10 @@ class GlobalPage extends Component {
    this.state = {
      slideIndex: 0,
    };
-   var {dispatch}=this.props;
+   var {dispatch,regularReducer}=this.props;
+   if(regularReducer.wbgSortBy==='fBoard')
+    dispatch(sortGWordBoxesBy('wordbox/boxName'));
+
    dispatch(startDLGWordBoxes());
  }
 

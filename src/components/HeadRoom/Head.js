@@ -20,6 +20,7 @@ import MenuItem from 'material-ui/MenuItem';
 import FilterWB from './FilterWB';
 import SortWB from './SortWB';
 import SortWBG from './SortWBG';
+import SortWBF from './SortWBF';
 
 
 class Head extends Component {
@@ -44,6 +45,7 @@ class Head extends Component {
 
   render() {
     var {dispatch, regularReducer} =this.props;
+    //console.log("sec: "+this.props.section);
     return (
         <HeadRoom style={{zIndex:'101'}}>
         <AppBar
@@ -60,6 +62,7 @@ class Head extends Component {
                 <i style={{margin:'5px'}} className="material-icons md-light">search</i>
               </IconButton>
 
+
               {(this.props.section===1)&& <FilterWB/> }
               {(this.props.section===1)&& <SortWB/> }
               {(this.props.section===2)&&
@@ -71,6 +74,7 @@ class Head extends Component {
                 </IconButton>
               }
               {(this.props.section===3)&& <SortWBG/>}
+              {(this.props.section===4)&& <SortWBF/>}
 
 
 

@@ -8,7 +8,7 @@ class UserProfile extends Component {
   render() {
     var{regularReducer}=this.props;
     return (<div>
-      <Head title={"My Profile"} section={3}/>
+      <Head title={"My Profile"} section={5}/>
       <UserBox friendReq={regularReducer.userDataSearchable}/>
     </div>
     );

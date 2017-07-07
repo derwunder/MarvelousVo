@@ -32,7 +32,10 @@ var initialState ={
     userDataSearchable:false,
     userSearch:[],
     friendReq:[],
-    friendList:[]
+    friendList:[],
+    w8Global:false,
+    w8GlobalMore:false,
+    numIGlobal:false
   }
 };
 var store = configureStore(initialState);

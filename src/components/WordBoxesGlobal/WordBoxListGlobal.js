@@ -16,6 +16,8 @@ const { scaleDown } = transitions;
 import wordBoxAPI from '../../api/wordBoxAPI';
 
 import W8Global from '../w8Dialogs/W8Global';
+import W8GlobalMore from '../w8Dialogs/W8GlobalMore';
+import {startDLGWordBoxesScroll,globalItemsNumber} from '../../actions/ActWordBox';
 
 
 
@@ -30,12 +32,35 @@ class WordBoxListGlobal extends Component {
     }
 
     handleScroll() {
+      var {dispatch, gWordBoxesReducer,regularReducer}=this.props;
       const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
       const body = document.body;
       const html = document.documentElement;
       const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
       const windowBottom = windowHeight + window.pageYOffset;
-      if (windowBottom >= docHeight) {
+      if (windowBottom >= docHeight && !regularReducer.numIGlobal &&
+          regularReducer.wbgSortBy==='myPost' &&
+          regularReducer.wbgSortBy==='fBoard') {
+        dispatch(globalItemsNumber(true));
+        var lastKey= gWordBoxesReducer[(gWordBoxesReducer.length)-1]['id'];
+        var lastBN='';
+        if(regularReducer.wbgSortBy==='wordbox/boxName'){
+          lastBN=gWordBoxesReducer[(gWordBoxesReducer.length)-1]['wordbox']['boxName'];
+        }
+        else if(regularReducer.wbgSortBy==='wordbox/updatedAt'){
+          lastBN=gWordBoxesReducer[(gWordBoxesReducer.length)-1]['wordbox']['updatedAt'];
+        }
+        else if(regularReducer.wbgSortBy==='likeCount'){
+          lastBN=gWordBoxesReducer[(gWordBoxesReducer.length)-1]['likeCount'];
+        }
+        else if(regularReducer.wbgSortBy==='downloadsCount'){
+          lastBN=gWordBoxesReducer[(gWordBoxesReducer.length)-1]['downloadsCount'];
+        }
+
+
+
+          console.log(lastKey);
+        dispatch(startDLGWordBoxesScroll(lastBN,lastKey));
         this.setState({
           message:'bottom reached'
         });
@@ -59,6 +84,11 @@ class WordBoxListGlobal extends Component {
 var {gWordBoxesReducer, authReducer,regularReducer}=this.props;
 var {wbFavorite,wbFBoard,wbGBoard,wbSearch,wbSortBy} =this.props.regularReducer;
 //console.log(wbFavorite);
+  var fName='',fAvat='';
+if(this.props.fboard && gWordBoxesReducer.length>0){
+  fName=gWordBoxesReducer[0]['wordbox']['creatorName'];
+  fAvat=gWordBoxesReducer[0]['wordbox']['creatorAvatar'];
+}
 
     var wordBoxesLoad = () =>{
 
@@ -66,7 +96,7 @@ var {wbFavorite,wbFBoard,wbGBoard,wbSearch,wbSortBy} =this.props.regularReducer;
           var tp=this.props.type;
           var uid=authReducer.uid;
         return (
-          wordBoxAPI.filterWordBoxesGlobal(gWordBoxesReducer,tp,uid).map((item,index)=>{
+          wordBoxAPI.filterWordBoxesGlobal(gWordBoxesReducer,tp,wbSortBy,wbSearch).map((item,index)=>{
             var gWBDls=0,gWBLks=0;
             item.hasOwnProperty('downloads')?gWBDls=Object.keys(item.downloads).length:gWBDls=0;
             item.hasOwnProperty('like')?gWBLks=Object.keys(item.like).length:gWBLks=0;
@@ -80,23 +110,28 @@ var {wbFavorite,wbFBoard,wbGBoard,wbSearch,wbSortBy} =this.props.regularReducer;
 
     var value =true;var value2 =false;
     return (<div>
-      <Subheader style={{marginTop:8,display:regularReducer.w8Global?'none':''}}>
+      <Subheader style={{marginTop:8}}>
         <Chip labelColor={'#fff'}
           backgroundColor={teal300}>
-          <Avatar size={32} color={teal300} backgroundColor={teal700}>
+
+          <Avatar style={{display:this.props.fboard?'':'none'}} size={32} color={teal300} backgroundColor={teal700} src={fAvat}/>
+          <Avatar style={{display:this.props.fboard?'none':''}} size={32} color={teal300} backgroundColor={teal700}>
             <i style={{margin:'2px'}} className="material-icons md-light md-22">
-              {(regularReducer.wbgSortBy==='wordbox/boxName')?'sort_by_alpha':
+              {   (regularReducer.wbgSortBy==='wordbox/boxName')?'sort_by_alpha':
                             (regularReducer.wbgSortBy==='likeCount')?'thumb_up':
                               (regularReducer.wbgSortBy==='downloadsCount')?'file_download':
                                 (regularReducer.wbgSortBy==='wordbox/updatedAt')?'update':
-                              (regularReducer.wbgSortBy==='myPost')?'face':''}
+                                  (regularReducer.wbgSortBy==='myPost')?'face':
+                                    (regularReducer.wbgSortBy==='fBoard')?'supervisor_account':''}
               </i>
                   </Avatar>
-                  {(regularReducer.wbgSortBy==='wordbox/boxName')?'World Boxes':
+                  {this.props.fboard?fName:
+                  (regularReducer.wbgSortBy==='wordbox/boxName')?'World Boxes':
                                 (regularReducer.wbgSortBy==='likeCount')?'Most likes':
                                   (regularReducer.wbgSortBy==='downloadsCount')?'Most Downloads':
                                     (regularReducer.wbgSortBy==='wordbox/updatedAt')?'Recent Updates':
-                                  (regularReducer.wbgSortBy==='myPost')?'My Posts':''}
+                                  (regularReducer.wbgSortBy==='myPost')?'My Posts':
+                                (regularReducer.wbgSortBy==='fBoard')?'Friend Posts':''}
                 </Chip>
       </Subheader>
       <div  style={{display:regularReducer.w8Global?'':'none',
@@ -116,10 +151,12 @@ var {wbFavorite,wbFBoard,wbGBoard,wbSearch,wbSortBy} =this.props.regularReducer;
       {wordBoxesLoad()}{/*style={{display:'inline-block',verticalAlign:'top'}}*/}
 
     </StackGrid>
-    <div>
-        <div className="fixedDiv">{this.state.message}</div>
-        <div className="scrollDiv"></div>
-      </div>
+    <div  style={{display:regularReducer.w8GlobalMore?'':'none',
+      position:'relative',zIndex:20,
+      bottom:0,textAlign:'center',
+      margin:'0 auto',marginTop:15,marginBottom:15}}><W8GlobalMore/></div>
+
+
   </div>
     );
   }

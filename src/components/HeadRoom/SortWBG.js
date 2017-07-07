@@ -7,7 +7,7 @@ import { IconMenu, MenuItem,
 
 
 import {sortWordBoxesBy,sortGWordBoxesBy} from '../../actions/Actions';
-import {startDLGWordBoxes,startDLGWordBoxesByUser} from '../../actions/ActWordBox';
+import {startDLGWordBoxes,startDLGWordBoxesByUser,globalItemsNumber} from '../../actions/ActWordBox';
 
 //import '../css/home.css';
 
@@ -51,6 +51,7 @@ class SortWBG extends Component {
           </IconButton>
         } value="1" primaryText="Worldboxes"
           onTouchTap={ ()=>{
+            dispatch(globalItemsNumber(false));
             dispatch(sortGWordBoxesBy('wordbox/boxName'));
             dispatch(startDLGWordBoxes());
           } } />
@@ -60,6 +61,7 @@ class SortWBG extends Component {
             </IconButton>
           } value="2" primaryText="Downloads"
             onTouchTap={ ()=>{
+              dispatch(globalItemsNumber(false));
               dispatch(sortGWordBoxesBy('downloadsCount'));
               dispatch(startDLGWordBoxes());
             } }  />
@@ -69,6 +71,7 @@ class SortWBG extends Component {
             </IconButton>
           } value="3" primaryText="Likes"
           onTouchTap={ ()=>{
+            dispatch(globalItemsNumber(false));
             dispatch(sortGWordBoxesBy('likeCount'));
             dispatch(startDLGWordBoxes());
           } }  />
@@ -78,6 +81,7 @@ class SortWBG extends Component {
         </IconButton>
       } value="4" primaryText="Updates"
         onTouchTap={ ()=>{
+          dispatch(globalItemsNumber(false));
           dispatch(sortGWordBoxesBy('wordbox/updatedAt'));
           dispatch(startDLGWordBoxes());
         } }  />

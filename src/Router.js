@@ -12,6 +12,7 @@ import WordListAll from './views/WordListAll';
 import MyLearning from './views/MyLearning';
 import FriendList from './views/FriendList';
 import FriendBoard from './views/FriendBoard';
+import FriendWBoxes from './views/FriendWBoxes';
 import GlobalBoard from './views/GlobalBoard';
 import GlobalPage from './views/GlobalPage';
 import GlobalBoardWordBox from './views/GlobalBoardWordBox';
@@ -54,6 +55,7 @@ class Routes extends Component {
           <Route path="/AllWords" component={WordListAll}/>
           <Route path="/MyLearning" component={MyLearning}/>
           <Route path="/FriendBoard" component={FriendBoard}/>
+          <Route path="/FriendBoard/:fid" component={FriendWBoxes}/>
           <Route path="/FriendList" component={FriendList}/>
         </Route>
         <Route path="/GlobalBoard" component={GlobalPage} //onEnter={requireLogin}
