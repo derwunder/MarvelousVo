@@ -229,7 +229,7 @@ export var startLikeWordBox =(idWBG,type)=>{
   };
 };
 
-/******** FRIEND BOAD DL WORD BOXES *****/
+/******** FRIEND BOARD DL WORD BOXES *****/
 export var addMoreFGlobalWordBoxes=(gWordBoxes,inx)=>{
   return {
     type:'ADD_MORE_FGLOBAL_WORDBOXES',
@@ -300,7 +300,7 @@ export var startDLFBWordBoxes = () =>{
         });
 
       });
-//      dispatch(setGlobalWordBoxes(parsedGWordBoxes));
+      //      dispatch(setGlobalWordBoxes(parsedGWordBoxes));
 
 
   };
@@ -346,7 +346,7 @@ export var startDLGWordBoxes = () =>{
   //  var numIGlobal=getState().regularReducer.numIGlobal;
     var gWordBoxesRef = ref.child(`global/wordboxes`)
           .orderByChild(sortWBG)
-          .limitToFirst(4)
+          .limitToFirst(50)
           ;
 
     return gWordBoxesRef.once('value').then((snapshot)=>{
@@ -472,7 +472,7 @@ export var startDLGWordBoxesScroll = (lastBN,lastKey) =>{
     var gWordBoxesRef = ref.child(`global/wordboxes`)
           .orderByChild(sortWBG)
           .startAt(lastBN,lastKey)
-          .limitToFirst(4)
+          .limitToFirst(50)
           ;
 
     return gWordBoxesRef.once('value').then((snapshot)=>{
@@ -540,7 +540,7 @@ export var startDLGWordBoxesScroll = (lastBN,lastKey) =>{
         setTimeout( ()=>{dispatch(globalW8MoreDialog());}, 2000);
 
         var endPass=false;
-        if(parsedGWordBoxes.length<4) endPass=true;
+        if(parsedGWordBoxes.length<50) endPass=true;
         setTimeout(()=>{dispatch(globalItemsNumber(endPass));},1000);
 
     });

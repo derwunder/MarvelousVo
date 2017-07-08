@@ -52,8 +52,9 @@ class WordBoxGlobal extends Component {
             : <div/>
           }
 
-            <CardTitle style={{padding:5}}
-              title={(this.props.item.boxName).charAt(0).toUpperCase() + (this.props.item.boxName).slice(1)
+            <CardTitle style={{padding:5, overflow:'hidden',textOverflow:'ellipsis', maxHeight:72}}
+              title={(this.props.item.boxName).charAt(0).toUpperCase() + ((this.props.item.boxName).substring(0,20)).slice(1)
+
             } />
           </Link>
 

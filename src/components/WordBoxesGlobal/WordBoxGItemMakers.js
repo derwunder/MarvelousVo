@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 
 //import '../css/home.css';
 import {Card,CardText} from 'material-ui/Card';
-import {Avatar,Subheader} from 'material-ui';
+import {Avatar,Subheader,IconButton} from 'material-ui';
 import {teal300, teal700} from 'material-ui/styles/colors';
 
 
@@ -21,7 +21,8 @@ class WordBoxGItemMakers extends Component {
     const mkLen = itemmaker.length;
     return  itemmaker.map((mk,inx)=>{
         return (<div key={inx+mk.makerUID} style={{display:'inline-flex',marginRight:7}}>
-          <Avatar src={mk.makerAvatar} size={36}/>
+          <IconButton style={{margin:0,padding:0}} tooltip={mk.makerName} touch={true} tooltipPosition="bottom-right">
+          <Avatar src={mk.makerAvatar} size={36}/></IconButton>
         </div>);
       });
     };

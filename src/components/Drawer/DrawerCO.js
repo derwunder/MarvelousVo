@@ -14,6 +14,7 @@ import ActionFriendBoard from 'material-ui/svg-icons/action/supervisor-account';
 import ImageViewComfy from 'material-ui/svg-icons/image/view-comfy';
 import ComContacts from 'material-ui/svg-icons/communication/contacts';
 import ActionLang from 'material-ui/svg-icons/action/language';
+import ActionExitApp from 'material-ui/svg-icons/action/exit-to-app';
 import Notifications from 'material-ui/svg-icons/social/notifications';
 import {white} from 'material-ui/styles/colors';
 
@@ -64,7 +65,7 @@ class DrawerCO extends Component {
             <Divider/>
             <Subheader>Session</Subheader>
             <Link style={{textDecoration:'none'}} to="/" onClick={()=>dispatch(logoutFB())}>
-              <ListItem primaryText="Logout" leftIcon={<ActionLang/>} />
+              <ListItem primaryText="Logout" leftIcon={<ActionExitApp/>} />
             </Link>
           </List>
         </Drawer>

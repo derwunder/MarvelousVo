@@ -271,10 +271,23 @@ export var updateUserDataSer = (userData) =>{
   return (dispatch,getState)=>{
 
     var user = auth.currentUser;
-
+    var authDT=getState().authReducer;
+    var uSearchable=getState().regularReducer.userDataSearchable;
+    console.log(user);
     user.updateProfile(userData).then(function() {
           dispatch(updateUserData(userData));
           console.log("user update"); // Update successful.
+          if(uSearchable){
+            var userDataSearchable={
+              userName:(userData.displayName).toLowerCase(),
+              userPhoto:authDT.photoURL,
+              userEmail:authDT.email
+            };
+            var fSearchRef= ref.child(`fsearch/users/${getState().authReducer.uid}`).set(userDataSearchable)
+              .then(()=> {
+                console.log("succes fsearch updt too");
+                  });
+          }
         }, function(error) {
           console.log("Error with user update"); // An error happened.
         });

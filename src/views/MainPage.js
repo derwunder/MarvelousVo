@@ -46,29 +46,14 @@ class MainPage extends Component {
           title="Marvelous Vocabulary"
           iconElementLeft={<IconButton><NotificationsIcon /></IconButton>}
           onLeftIconButtonTouchTap={()=>{dispatch(drawerOpen());}}
-        >
-          <Toolbar style={{marginTop:'5px',backgroundColor:'transparent'}}>
-            <ToolbarGroup firstChild={true}>
-            <ToolbarSeparator style={{backgroundColor:'#fff'}} />
-            <i style={{margin:'5px'}} className="material-icons md-light">search</i>
-            <TextField style={{maxWidth:120}}
-              hintText="Hint Text"
-              hintStyle={{color:'rgba(255, 255, 255, 0.6)'}}
-              inputStyle={{color:'#fff'}}
-              id="text-search"
-              onChange={this.handleChange}
-            />
-            </ToolbarGroup>
-          </Toolbar>
-
-        </AppBar>
+        />
       </HeadRoom>
         { /*iconClassNameRight="muidocs-icon-navigation-expand-more"*/ }
 
 
         <DrawerCO/>
         {this.props.children}  {/*it will allow routes pages...*/}
-        <Foot/>
+        <div style={{height:50}}/>
 
       </div>
     );

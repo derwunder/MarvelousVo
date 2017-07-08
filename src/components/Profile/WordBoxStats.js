@@ -31,11 +31,10 @@ class WordBoxStats extends Component {
 
     var wb =this.props.wb;
 
-    var cWords=0, cWoBook=0, cWbG=0,cWbF=0, cWbFav=0;
+    var cWords=0, cWoBook=0, cWbG=0, cWbFav=0;
     if(wb.length>0){
        wb.forEach((item)=>{
          if(item.gBoard)cWbG++;
-         if(item.fBoard)cWbF++;
          if(item.favorite)cWbFav++;
          if(item.hasOwnProperty('words')){
           cWords+= (item.words).length;
@@ -85,14 +84,6 @@ class WordBoxStats extends Component {
                       className={"material-icons md-18 md-dark"} aria-hidden="true">bookmark</i>
                        <p style={{color:'rgba(0, 0, 0, 0.7)',maxWidth:140, margin:5,fontSize:14,display:'inline-block',verticalAlign:'top'}}>
                          {cWoBook+" Words Marked"}</p>
-                 </TableRowColumn>
-               </TableRow>
-               <TableRow style={{borderBottom:''}}>
-                 <TableRowColumn>
-                   <i style={{display:'inline-block',marginRight:5}}
-                      className={"material-icons md-18 md-dark"} aria-hidden="true">supervisor_account</i>
-                       <p style={{color:'rgba(0, 0, 0, 0.7)',maxWidth:140, margin:5,fontSize:14,display:'inline-block',verticalAlign:'top'}}>
-                         {cWbF+" Friend Post"}</p>
                  </TableRowColumn>
                </TableRow>
                <TableRow style={{borderBottom:''}}>

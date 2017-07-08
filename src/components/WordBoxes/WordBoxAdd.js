@@ -12,7 +12,6 @@ class WordBoxAdd extends Component {
     this.state = {open:false,
       boxName:'',
       favorite:false,
-      fBoard:false,
       gBoard:false
     };
     this.handleChangeFav=this.handleChangeFav.bind(this);
@@ -32,9 +31,6 @@ class WordBoxAdd extends Component {
     handleChangeFav  () {
       this.setState({favorite: !this.state.favorite});
     }
-    handleChangeFB = () => {
-      this.setState({fBoard: !this.state.fBoard});
-    }
     handleChangeGB = () => {
       this.setState({gBoard: !this.state.gBoard});
     }
@@ -43,7 +39,6 @@ class WordBoxAdd extends Component {
       var newItem ={
       boxName:this.state.boxName,
       favorite:this.state.favorite,
-      fBoard:this.state.fBoard,
       gBoard:this.state.gBoard
     };
     dispatch(createWordBox(newItem));
@@ -95,14 +90,6 @@ class WordBoxAdd extends Component {
             className={this.state.favorite?"material-icons md-20 md-dark md-active":"material-icons md-20 md-dark"}
              aria-hidden="true">favorite</i>Favorite
           </span>}
-      labelPosition="left" />
-      <Toggle style={{maxWidth:300,marginTop:15}}
-        onToggle={this.handleChangeFB}
-      label={<span >
-        <i style={{marginRight:5,marginLeft:5}}
-          className={this.state.fBoard?"material-icons md-20 md-dark md-active":"material-icons md-20 md-dark"}
-          aria-hidden="true">supervisor_account</i>Friend Board
-      </span>}
       labelPosition="left" />
       <Toggle style={{maxWidth:300,marginTop:15}}
         onToggle={this.handleChangeGB}

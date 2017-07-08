@@ -111,11 +111,13 @@ if(this.props.fboard && gWordBoxesReducer.length>0){
     var value =true;var value2 =false;
     return (<div>
       <Subheader style={{marginTop:8}}>
-        <Chip labelColor={'#fff'}
+        <Chip  style={{display:this.props.fboard?'flex':'none'}} labelColor={'#fff'} backgroundColor={teal300}>
+          <Avatar  size={32} color={teal300} backgroundColor={teal700} src={fAvat}/>
+            {this.props.fboard?fName:''}
+        </Chip>
+        <Chip style={{display:this.props.fboard?'none':'flex'}}  labelColor={'#fff'}
           backgroundColor={teal300}>
-
-          <Avatar style={{display:this.props.fboard?'':'none'}} size={32} color={teal300} backgroundColor={teal700} src={fAvat}/>
-          <Avatar style={{display:this.props.fboard?'none':''}} size={32} color={teal300} backgroundColor={teal700}>
+          <Avatar size={32} color={teal300} backgroundColor={teal700}>
             <i style={{margin:'2px'}} className="material-icons md-light md-22">
               {   (regularReducer.wbgSortBy==='wordbox/boxName')?'sort_by_alpha':
                             (regularReducer.wbgSortBy==='likeCount')?'thumb_up':
@@ -125,8 +127,7 @@ if(this.props.fboard && gWordBoxesReducer.length>0){
                                     (regularReducer.wbgSortBy==='fBoard')?'supervisor_account':''}
               </i>
                   </Avatar>
-                  {this.props.fboard?fName:
-                  (regularReducer.wbgSortBy==='wordbox/boxName')?'World Boxes':
+                  { (regularReducer.wbgSortBy==='wordbox/boxName')?'World Boxes':
                                 (regularReducer.wbgSortBy==='likeCount')?'Most likes':
                                   (regularReducer.wbgSortBy==='downloadsCount')?'Most Downloads':
                                     (regularReducer.wbgSortBy==='wordbox/updatedAt')?'Recent Updates':

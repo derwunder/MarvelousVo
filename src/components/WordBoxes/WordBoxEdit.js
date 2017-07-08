@@ -12,7 +12,6 @@ class WordBoxEdit extends Component {
     this.state = {
       boxName:this.props.item.boxName,
       favorite:this.props.item.favorite,
-      fBoard:this.props.item.fBoard,
       gBoard:this.props.item.gBoard
     };
     this.handleChangeFav=this.handleChangeFav.bind(this);
@@ -25,9 +24,6 @@ class WordBoxEdit extends Component {
     if(nextProps.item.favorite !== this.props.item.favorite   ) {
       this.setState({favorite: nextProps.item.favorite });
     }
-    if(nextProps.item.fBoard !== this.props.item.fBoard   ) {
-      this.setState({fBoard: nextProps.item.fBoard });
-    }
     if(nextProps.item.gBoard !== this.props.item.gBoard   ) {
       this.setState({gBoard: nextProps.item.gBoard });
     }
@@ -37,9 +33,6 @@ class WordBoxEdit extends Component {
     handleChangeFav  () {
       this.setState({favorite: !this.state.favorite});
     }
-    handleChangeFB = () => {
-      this.setState({fBoard: !this.state.fBoard});
-    }
     handleChangeGB = () => {
       this.setState({gBoard: !this.state.gBoard});
     }
@@ -48,11 +41,10 @@ class WordBoxEdit extends Component {
       var itemUpdates ={
       boxName:this.state.boxName,
       favorite:this.state.favorite,
-      fBoard:this.state.fBoard,
       gBoard:this.state.gBoard
     };
     dispatch(startWordBoxUpdate(this.props.item.id,itemUpdates));
-    this.props.handleEditor(this.state.favorite,this.state.fBoard,this.state.gBoard);
+    this.props.handleEditor(this.state.favorite,this.state.gBoard);
     //this.props.updateState(this.state.favorite,this.state.fBoard,this.state.gBoard);
     }
 
@@ -97,14 +89,6 @@ class WordBoxEdit extends Component {
             className={this.state.favorite?"material-icons md-20 md-dark md-active":"material-icons md-20 md-dark"}
              aria-hidden="true">favorite</i>Favorite
           </span>}
-      labelPosition="left" />
-      <Toggle style={{maxWidth:300,marginTop:15}}
-        onToggle={this.handleChangeFB} defaultToggled={this.props.item.fBoard}
-      label={<span >
-        <i style={{marginRight:5,marginLeft:5}}
-          className={this.state.fBoard?"material-icons md-20 md-dark md-active":"material-icons md-20 md-dark"}
-          aria-hidden="true">supervisor_account</i>Friend Board
-      </span>}
       labelPosition="left" />
       <Toggle style={{maxWidth:300,marginTop:15}}
         onToggle={this.handleChangeGB} defaultToggled={this.props.item.gBoard}
