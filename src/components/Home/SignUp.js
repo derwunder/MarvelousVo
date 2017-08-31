@@ -84,7 +84,7 @@ class SignUp extends Component {
     <CardText>
       <i onClick={this.onLoginGoogle} style={{margin:'5px',cursor:'pointer'}} className="fa fa-google material-icons md-48 md-dark" aria-hidden="true"></i>
       <i style={{margin:'5px',cursor:'pointer'}} className="fa fa-facebook-official material-icons md-48 md-dark" aria-hidden="true"></i>
-      <i onClick={this.onLoginGitH} style={{margin:'5px',cursor:'pointer'}} className="fa fa-github  material-icons md-48 md-dark" aria-hidden="true"></i>
+    {/*}  <i onClick={this.onLoginGitH} style={{margin:'5px',cursor:'pointer'}} className="fa fa-github  material-icons md-48 md-dark" aria-hidden="true"></i>*/}
       <i style={{margin:'5px',cursor:'pointer', color:this.state.expanded?teal600:''}} onClick={this.handleToggle} className="fa fa-envelope material-icons md-48 md-dark" aria-hidden="true"></i>
 
     </CardText>
